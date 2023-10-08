@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/school.png</file>
+        <file>img/teacher.png</file>
+        <file>img/company.png</file>
+        <file>img/economicgame.png</file>
+        <file>img/bank.png</file>
+    </qresource>
+</RCC>
