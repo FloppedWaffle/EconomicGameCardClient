@@ -308,18 +308,29 @@ void BankNFCWindow::companyTaxButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/pay_company_taxes", jsonData, [this, taxAmount](QNetworkReply *reply)
+    rs->httpPost("banker/pay_company_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         QNetworkReply::NetworkError error = reply->error();
-        QString errorReason = QJsonDocument::fromJson(reply->readAll())["error"].toString();
         if (commonNetworkError(error)) return;
+
+        QJsonDocument jsonData = QJsonDocument::fromJson(reply->readAll());
+        QString errorReason = jsonData["error"].toString();
+        int taxAmount = jsonData["tax_amount"].toInt();
 
         if (error == QNetworkReply::NoError)
         {
-            QMessageBox::information(this,
-            "Успешно!",
-            QString("Налог фирмы был уплачен суммой в %1 тлц.").arg(taxAmount));
+            if (!taxAmount)
+            {
+                QMessageBox::information(this,
+                "Предупреждение!",
+                "Налог уже был уплачен ранее! Никаких задолжностей у фирмы больше нет.");
+            }
+            else {
+                QMessageBox::information(this,
+                "Успешно!",
+                QString("Налог фирмы был уплачен суммой в %1 тлц.").arg(taxAmount));
+            }
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {

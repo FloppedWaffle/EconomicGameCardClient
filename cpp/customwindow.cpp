@@ -5,11 +5,14 @@
 
 CustomWindow::CustomWindow(QWidget *parent) :
     QMainWindow{parent},
-    rs(new RequestSender(QUrl("http://31.129.111.182:5000"), this)),
+//    rs(new RequestSender(QUrl("http://31.129.111.182:5000"), this)),
     nfcMgr(new NFCManager()),
     p_settings("EconomicGame", "AuthSettings")
 {
     this->setWindowIcon(QIcon(":/img/economicgame.png"));
+
+    bool prod = false;
+    rs = new RequestSender(QUrl(prod ? "http://31.129.111.182:5000" : "http://192.168.1.187:5000"), this);
 }
 
 

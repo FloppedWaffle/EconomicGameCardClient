@@ -1139,7 +1139,7 @@ QPushButton:disabled
           <string notr="true"/>
          </property>
          <property name="text">
-          <string>Выйти из аккаунта</string>
+          <string>Выйти</string>
          </property>
         </widget>
        </item>
