@@ -90,10 +90,11 @@ void BankNFCWindow::transferMoney()
 
     rs->httpPost("banker/transfer_money", jsonData, [this, transferAction, transferAmount](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
-
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
+
 
         if (error == QNetworkReply::NoError)
         {
@@ -111,22 +112,17 @@ void BankNFCWindow::transferMoney()
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {
-            if (!this->isVisible()) return;
             QMessageBox::critical(nullptr,
             "Ошибка 404 (ContentNotFoundError)",
             "Инфомарция о таком человеке не была найдена! ");
-
             this->close();
             this->deleteLater();
         }
         else
         {
-            if (!this->isVisible()) return;
-
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-
             this->close();
             this->deleteLater();
         }
@@ -213,6 +209,7 @@ void BankNFCWindow::personTransferButtonClicked()
     rs->httpPost("banker/transfer_player_money", jsonData, [this, amount, selectedId](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
@@ -233,7 +230,6 @@ void BankNFCWindow::personTransferButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-
             this->close();
             this->deleteLater();
         }
@@ -257,6 +253,7 @@ void BankNFCWindow::payTaxesButtonClicked()
     rs->httpPost("banker/pay_player_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
@@ -274,11 +271,9 @@ void BankNFCWindow::payTaxesButtonClicked()
         }
         else
         {
-            if (!this->isVisible()) return;
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-
             this->close();
             this->deleteLater();
         }
@@ -311,6 +306,7 @@ void BankNFCWindow::companyTaxButtonClicked()
     rs->httpPost("banker/pay_company_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
@@ -373,6 +369,7 @@ void BankNFCWindow::ministerSalaryButtonClicked()
     rs->httpPost("banker/pay_minister_salary", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
@@ -412,9 +409,9 @@ void BankNFCWindow::refreshWindow()
 
     rs->httpPost("banker/get_person", jsonObject, [this](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
-
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
         if (error == QNetworkReply::NoError)
@@ -494,8 +491,6 @@ void BankNFCWindow::refreshWindow()
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {
-            if (!this->isVisible()) return;
-
             QMessageBox::critical(nullptr,
             "Ошибка 404 (ContentNotFoundError)",
             "Инфомарция о таком человеке не была найдена! ");

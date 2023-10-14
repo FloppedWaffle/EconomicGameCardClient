@@ -10,7 +10,12 @@ CompanyWindow::CompanyWindow(QWidget *parent) :
     //TODO: надо доделать ошибки у запросов (посмотреть, какие ошибки могут прилетать с бэка и дописать тут окна ошибок.
 
     ui->setupUi(this);
+
+    ui->stackedWidget->setCurrentIndex(0);
     this->setWindowTitle("Фирма");
+
+    connect(ui->navCompanyButton, &QPushButton::clicked, this, &CompanyWindow::navigateBarButtonClicked);
+    connect(ui->navMemoButton, &QPushButton::clicked, this, &CompanyWindow::navigateBarButtonClicked);
 
     connect(ui->founderLineEdit, &QLineEdit::textChanged, this, &CompanyWindow::founderLineEditChanged);
     connect(ui->founderWithdrawButton, &QPushButton::clicked, this, &CompanyWindow::payFounder);
@@ -28,6 +33,28 @@ CompanyWindow::CompanyWindow(QWidget *parent) :
 CompanyWindow::~CompanyWindow()
 {
     delete ui;
+}
+
+
+
+void CompanyWindow::navigateBarButtonClicked()
+{
+    QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
+
+    ui->navCompanyButton->setStyleSheet("border-bottom: none;");
+    ui->navMemoButton->setStyleSheet("border-bottom: none;");
+
+    QString styleString = "border-bottom: 3px solid black; border-left: 3px solid black; border-right: 3px solid black;";
+    if (senderButtonName == "navCompanyButton")
+    {
+        ui->navCompanyButton->setStyleSheet(styleString);
+        ui->stackedWidget->setCurrentWidget(ui->companyPage);
+    }
+    else
+    {
+        ui->navMemoButton->setStyleSheet(styleString);
+        ui->stackedWidget->setCurrentWidget(ui->memoPage);
+    }
 }
 
 
@@ -106,9 +133,9 @@ void CompanyWindow::payFounder()
 
     rs->httpPost("company/pay_founder", jsonData, [this, withdraw](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
-
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
         if (error == QNetworkReply::NoError)
@@ -218,9 +245,9 @@ void CompanyWindow::refreshWindow()
 
     rs->httpGet("company", [this](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
-
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
         if (error == QNetworkReply::NoError)
@@ -231,12 +258,15 @@ void CompanyWindow::refreshWindow()
             QString companyName = '"' + jsonData["name"].toString() + '"';
             bool companyIsState = jsonData["is_state"].toBool();
 
+            ui->companyName->setText(companyName);
+            ui->companyName->setAlignment(Qt::AlignCenter);
+
             if (companyIsState)
             {
-                foundersTextBrowser->setText("Не предусмотрен, т.к. это гос-ое предприятие");
-                ui->companyBalance->setText("Не предусмотрен, т.к. это гос-ое предприятие");
-                ui->companyProfit->setText("Не предусмотрен, т.к. это гос-ое предприятие");
-                ui->companyTaxes->setText("Не предусмотрены, т.к. это гос-ое предприятие");
+                foundersTextBrowser->setText("Государственное предприятие");
+                ui->companyBalance->setText("Государственное предприятие");
+                ui->companyProfit->setText("Государственное предприятие");
+                ui->companyTaxes->setText("Государственное предприятие");
                 ui->founderLineEdit->setDisabled(true);
                 ui->foundersListWidget->setDisabled(true);
                 ui->founderWithdrawLineEdit->setDisabled(true);
@@ -248,22 +278,9 @@ void CompanyWindow::refreshWindow()
                 QString companyTaxes = "Налоги фирмы за прошлый период: " + jsonData["tax_paid"].toString() + " тлц";
                 QJsonArray founders = jsonData["founders"].toArray();
 
-                if (ui->companyName->toPlainText() != companyName)
-                {
-                    ui->companyName->setText(companyName);
-                }
-                if (ui->companyBalance->text() != companyBalance && !companyIsState)
-                {
-                    ui->companyBalance->setText(companyBalance);
-                }
-                if (ui->companyProfit->text() != companyProfit && !companyIsState)
-                {
-                    ui->companyProfit->setText(companyProfit);
-                }
-                if (ui->companyTaxes->text() != companyTaxes && !companyIsState)
-                {
-                    ui->companyTaxes->setText(companyTaxes);
-                }
+                ui->companyBalance->setText(companyBalance);
+                ui->companyProfit->setText(companyProfit);
+                ui->companyTaxes->setText(companyTaxes);
 
                 foundersTextBrowser->setText("| ");
                 for (const QJsonValue founder : founders)
@@ -273,60 +290,37 @@ void CompanyWindow::refreshWindow()
                     foundersTextBrowser->setText(oldText + founderName + " | ");
                 }
                 if (founders.size() > 1) ui->foundersNames_label->setText("Владельцы фирмы: ");
-                ui->companyName->setAlignment(Qt::AlignCenter);
             }
 
-
-
-            rs->httpGet("/company/get_services", [this](QNetworkReply *reply)
+            // services parse
+            m_model->clear();
+            QJsonArray services = jsonData["services"].toArray();
+            for (const QJsonValue service : services)
             {
-                QNetworkReply::NetworkError error = reply->error();
+                int serviceId = service[0].toInt();
+                QString serviceName = service[1].toString();
+                int serviceCost = service[2].toInt();
+                int serviceQuantity = service[3].toInt();
 
-                if (commonNetworkError(error)) return;
+                QString serviceInfo = QString("%1 | %2 тлц | %3 шт осталось").arg(serviceName).arg(serviceCost).arg(serviceQuantity);
 
-                QListView *listView = ui->serviceListView;
+                QStandardItem *item = new QStandardItem(serviceInfo);
+                item->setData(serviceId, Qt::UserRole);
+                item->setData(serviceCost, Qt::UserRole + 1);
+                item->setCheckable(true);
+                item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+                item->setCheckState(Qt::Unchecked);
 
-                if (error == QNetworkReply::NoError)
-                {
-                    m_model->clear();
+                m_model->appendRow(item);
+            }
 
-                    QJsonDocument jsonData = QJsonDocument::fromJson(reply->readAll());
-                    QJsonArray services = jsonData["services"].toArray();
+            QListView *listView = ui->serviceListView;
 
-                    for (const QJsonValue service : services)
-                    {
-                        int serviceId = service[0].toInt();
-                        QString serviceName = service[1].toString();
-                        int serviceCost = service[2].toInt();
-                        int serviceQuantity = service[3].toInt();
-
-                        QString serviceInfo = QString("%1 | %2 тлц | %3 шт осталось").arg(serviceName).arg(serviceCost).arg(serviceQuantity);
-
-                        QStandardItem *item = new QStandardItem(serviceInfo);
-                        item->setData(serviceId, Qt::UserRole);
-                        item->setData(serviceCost, Qt::UserRole + 1);
-                        item->setCheckable(true);
-                        item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-                        item->setCheckState(Qt::Unchecked);
-
-                        m_model->appendRow(item);
-                    }
-
-                    listView->setModel(m_model);
-                    listView->setSelectionMode(QAbstractItemView::NoSelection);
-                }
-                else
-                {
-                    QString errorString = reply->errorString();
-                    QMessageBox::critical(this,
-                    errorString,
-                    "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
-                }
-            });
+            listView->setModel(m_model);
+            listView->setSelectionMode(QAbstractItemView::NoSelection);
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {
-            if (!this->isVisible()) return;
             QMessageBox::critical(this,
             "Ошибка",
             "Инфомарция о такой фирме не была найдена! "
@@ -335,7 +329,6 @@ void CompanyWindow::refreshWindow()
         }
         else
         {
-            if (!this->isVisible()) return;
             QString errorString = reply->errorString();
             QMessageBox::critical(this,
             errorString,

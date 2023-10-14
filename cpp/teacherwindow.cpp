@@ -12,7 +12,12 @@ TeacherWindow::TeacherWindow(QWidget *parent) :
     //TODO: надо доделать ошибки у запросов (посмотреть, какие ошибки могут прилетать с бэка и дописать тут окна ошибок.
 
     ui->setupUi(this);
+
     this->setWindowTitle("Учитель");
+    ui->stackedWidget->setCurrentIndex(0);
+
+    connect(ui->navTeacherButton, &QPushButton::clicked, this, &TeacherWindow::navigateBarButtonClicked);
+    connect(ui->navMemoButton, &QPushButton::clicked, this, &TeacherWindow::navigateBarButtonClicked);
 
     connect(ui->studentLineEdit, &QLineEdit::textChanged, this, &TeacherWindow::studentLineEditChanged);
 
@@ -31,6 +36,28 @@ TeacherWindow::TeacherWindow(QWidget *parent) :
 TeacherWindow::~TeacherWindow()
 {
     delete ui;
+}
+
+
+
+void TeacherWindow::navigateBarButtonClicked()
+{
+    QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
+
+    ui->navTeacherButton->setStyleSheet("border-bottom: none;");
+    ui->navMemoButton->setStyleSheet("border-bottom: none;");
+
+    QString styleString = "border-bottom: 3px solid black; border-left: 3px solid black; border-right: 3px solid black;";
+    if (senderButtonName == "navTeacherButton")
+    {
+        ui->navTeacherButton->setStyleSheet(styleString);
+        ui->stackedWidget->setCurrentWidget(ui->teacherPage);
+    }
+    else
+    {
+        ui->navMemoButton->setStyleSheet(styleString);
+        ui->stackedWidget->setCurrentWidget(ui->memoPage);
+    }
 }
 
 
@@ -114,8 +141,9 @@ void TeacherWindow::payTalicButtonClicked()
 
     rs->httpPost("teacher/pay_student_salary", jsonData, [this, salary](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
         if (error == QNetworkReply::NoError)
@@ -126,7 +154,6 @@ void TeacherWindow::payTalicButtonClicked()
         }
         else
         {
-            if (!this->isVisible()) return;
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
@@ -157,8 +184,9 @@ void TeacherWindow::payTaxesButtonClicked()
 
     rs->httpPost("teacher/pay_student_taxes", jsonData, [this](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
         if (error == QNetworkReply::NoError)
@@ -169,7 +197,6 @@ void TeacherWindow::payTaxesButtonClicked()
         }
         else
         {
-            if (!this->isVisible()) return;
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
@@ -187,6 +214,7 @@ void TeacherWindow::refreshWindow()
     rs->httpGet("teacher", [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
 
@@ -216,7 +244,6 @@ void TeacherWindow::refreshWindow()
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {
-            if (!this->isVisible()) return;
             QMessageBox::critical(this,
             "Ошибка 404 (ContentNotFoundError)",
             "Инфомарция о таком учителе не была найдена! "
@@ -225,7 +252,6 @@ void TeacherWindow::refreshWindow()
         }
         else
         {
-            if (!this->isVisible()) return;
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");

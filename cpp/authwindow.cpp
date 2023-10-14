@@ -15,13 +15,11 @@ AuthWindow::AuthWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->stackedWidget->setCurrentIndex(0);
-
     this->setWindowTitle("Добро пожаловать!");
     QTimer::singleShot(1500, [this]()
     {
         this->setWindowTitle("Главная страница");
     });
-
     ui->authLineEdit->setFocus();
 
     connect(ui->navAuthButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
@@ -108,16 +106,19 @@ void AuthWindow::authRequestButtonClicked()
             {
                 this->close();
                 mainWindow = new TeacherWindow(nullptr);
+                this->deleteLater();
             }
             else if (role == "company")
             {
                 this->close();
                 mainWindow = new CompanyWindow(nullptr);
+                this->deleteLater();
             }
             else
             {
                 this->close();
                 mainWindow = new BankerWindow(nullptr);
+                this->deleteLater();
             }
 
             mainWindow->show();

@@ -24,7 +24,7 @@ class ServicePayWindow : public CustomWindow
 
 public:
     explicit ServicePayWindow(QWidget *parent = nullptr, QStandardItemModel *model = nullptr);
-    ~ServicePayWindow();
+    ~ServicePayWindow() override;
 
     void serviceListViewClicked();
     void servicePlusButtonClicked();

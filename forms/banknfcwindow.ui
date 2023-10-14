@@ -172,7 +172,7 @@ QTextBrowser QScrollBar:down-arrow:vertical
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../res/resources.qrc">:/img/bank.png</pixmap>
+          <pixmap resource="../res/resources.qrc">:/img/img/bank.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>

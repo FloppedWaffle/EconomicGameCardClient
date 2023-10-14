@@ -9,7 +9,7 @@ CustomWindow::CustomWindow(QWidget *parent) :
     nfcMgr(new NFCManager()),
     p_settings("EconomicGame", "AuthSettings")
 {
-    this->setWindowIcon(QIcon(":/img/economicgame.png"));
+    this->setWindowIcon(QIcon(":/img/img/economicgame.png"));
 
     bool prod = false;
     rs = new RequestSender(QUrl(prod ? "http://31.129.111.182:5000" : "http://192.168.1.187:5000"), this);
@@ -84,9 +84,10 @@ void CustomWindow::setInputsEnabled(const bool &boolean)
 
 bool CustomWindow::commonNetworkError(const QNetworkReply::NetworkError &error)
 {
+    if (!this->isVisible()) return false;
+
     if (error == QNetworkReply::AuthenticationRequiredError)
     {
-        if (!this->isVisible()) return false;
         QMessageBox::critical(this,
         "Ошибка 401 (AuthenticationRequiredError)",
         "Вы неавторизованы! "
@@ -96,7 +97,6 @@ bool CustomWindow::commonNetworkError(const QNetworkReply::NetworkError &error)
     }
     else if (error == QNetworkReply::ConnectionRefusedError)
     {
-        if (!this->isVisible()) return false;
         QMessageBox::critical(this,
         "Ошибка (ConnectionRefusedError)",
         "Сервер отклонил запрос! "
@@ -107,7 +107,6 @@ bool CustomWindow::commonNetworkError(const QNetworkReply::NetworkError &error)
     else if (error == QNetworkReply::TimeoutError ||
              error == QNetworkReply::OperationCanceledError)
     {
-        if (!this->isVisible()) return false;
         QMessageBox::critical(this,
         "Ошибка (TimeoutError или OperationCanceledError)",
         "В данный момент сервер недоступен!");

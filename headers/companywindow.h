@@ -21,7 +21,9 @@ class CompanyWindow : public CustomWindow
 
 public:
     explicit CompanyWindow(QWidget *parent = nullptr);
-    ~CompanyWindow();
+    ~CompanyWindow() override;
+
+    void navigateBarButtonClicked();
 
     void founderLineEditChanged();
     void payFounder();
