@@ -18,7 +18,9 @@ class TeacherWindow : public CustomWindow
 
 public:
     explicit TeacherWindow(QWidget *parent = nullptr);
-    ~TeacherWindow();
+    ~TeacherWindow() override;
+
+    void navigateBarButtonClicked();
 
     void studentLineEditChanged();
 

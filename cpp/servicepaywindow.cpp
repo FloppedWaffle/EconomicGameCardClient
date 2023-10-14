@@ -121,25 +121,25 @@ void ServicePayWindow::servicePayButtonClicked()
 
     rs->httpPost("company/pay_services", jsonData, [this](QNetworkReply *reply)
     {
-        QNetworkReply::NetworkError error = reply->error();
-        QString errorReason = QJsonDocument::fromJson(reply->readAll())["error"].toString();
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
         if (commonNetworkError(error)) return;
+        QString errorReason = QJsonDocument::fromJson(reply->readAll())["error"].toString();
 
         if (error == QNetworkReply::NoError)
         {
-            if (!this->isVisible()) return;
             QMessageBox::information(this,
             "Успешно! ",
             "Оплата завершена корректно.");
             this->close();
+            this->deleteLater();
 
             CompanyWindow *companyWindow = qobject_cast<CompanyWindow*>(parent());
             companyWindow->refreshWindow();
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {
-            if (!this->isVisible()) return;
             QMessageBox::critical(this,
             "Ошибка 404 (ContentNotFoundError)",
             "Информация о таком покупателе не была найдена!");
@@ -148,14 +148,12 @@ void ServicePayWindow::servicePayButtonClicked()
         {
             if (errorReason == "no_enough_quantity")
             {
-                if (!this->isVisible()) return;
                 QMessageBox::critical(this,
                 "Ошибка 400 (ProtocolInvalidOperationError)",
                 "Недостаточно товаров/услуг для оплаты!");
             }
             else if (errorReason == "not_enough_money")
             {
-                if (!this->isVisible()) return;
                 QMessageBox::critical(this,
                 "Ошибка 400 (ProtocolInvalidOperationError)",
                 "Недостаточно средств для оплаты!");
@@ -163,7 +161,6 @@ void ServicePayWindow::servicePayButtonClicked()
         }
         else
         {
-            if (!this->isVisible()) return;
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
@@ -184,18 +181,16 @@ void ServicePayWindow::exitServicePayButtonClicked()
 void ServicePayWindow::keyPressEvent(QKeyEvent *event)
 {
     int eventKey = event->key();
+    qDebug() << eventKey;
 
-    if (eventKey == 16777216)
+    if (eventKey == 16777216) // ESC
     {
         this->close();
+        this->deleteLater();
     }
     else if (ui->serviceListView->hasFocus())
     {
-        if (eventKey == 16777235)   // Enter
-        {
-            serviceListViewClicked();
-        }
-        else if (eventKey == 61)    // CTRL + (+)
+        if (eventKey == 61)    // CTRL + (+)
         {
             servicePlusButtonClicked();
         }
@@ -203,8 +198,32 @@ void ServicePayWindow::keyPressEvent(QKeyEvent *event)
         {
             serviceMinusButtonClicked();
         }
+        else if (eventKey == 16777234) // LEFT ARROW
+        {
+            QModelIndex curIndex = ui->serviceListView->currentIndex();
+            QModelIndex prevIndex = curIndex.sibling(curIndex.row() - 1, curIndex.column());
 
-        this->setFocus();
-        ui->serviceListView->setFocus();
+            if (prevIndex.isValid())
+            {
+                ui->serviceListView->setCurrentIndex(prevIndex);
+            }
+
+            serviceListViewClicked();
+        }
+        else if (eventKey == 16777236) // RIGHT ARROW
+        {
+            QModelIndex curIndex = ui->serviceListView->currentIndex();
+            QModelIndex nextIndex = curIndex.sibling(curIndex.row() + 1, curIndex.column());
+
+            if (nextIndex.isValid())
+            {
+                ui->serviceListView->setCurrentIndex(nextIndex);
+            }
+
+            serviceListViewClicked();
+        }
+
+//        this->setFocus();
+//        ui->serviceListView->setFocus();
     }
 }

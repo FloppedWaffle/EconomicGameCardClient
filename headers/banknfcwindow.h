@@ -19,7 +19,7 @@ class BankNFCWindow : public CustomWindow
 
 public:
     explicit BankNFCWindow(QWidget *parent = nullptr, const QString &uid = nullptr);
-    ~BankNFCWindow();
+    ~BankNFCWindow() override;
 
 
     void checkIsUidSame();

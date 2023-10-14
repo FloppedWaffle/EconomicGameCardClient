@@ -11,12 +11,6 @@ NFCManager::NFCManager(QObject *parent)
 
 bool NFCManager::isCardAttached()
 {
-    /*
-        ПРИМЕЧАНИЕ: по логике, мы делаем эту функцию для того, чтобы понимать, лежит ли карта на ридере или нет.
-        Потому так и поступим. Если карты нет,т то возвращаем false, иначе - true.
-        Никаких доработок по нажатию на "Оплатить". Определяем ридер сразу же.
-    */
-
     size_t devicesCount;
     nfc_connstring devices[3];
     nfc_device *device;

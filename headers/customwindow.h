@@ -24,7 +24,7 @@ class CustomWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit CustomWindow(QWidget *parent = nullptr);
-    ~CustomWindow();
+    virtual ~CustomWindow();
 
     virtual void setInputsEnabled(const bool &boolean);
     virtual bool commonNetworkError(const QNetworkReply::NetworkError &error);

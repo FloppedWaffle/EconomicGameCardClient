@@ -15,7 +15,7 @@ class BankerWindow : public CustomWindow
 
 public:
     explicit BankerWindow(QWidget *parent = nullptr);
-    ~BankerWindow();
+    ~BankerWindow() override;
 
     void nfcReaderButtonClicked();
 

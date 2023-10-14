@@ -24,7 +24,7 @@ class AuthWindow : public CustomWindow
 
 public:
     explicit AuthWindow(QWidget *parent = nullptr);
-    ~AuthWindow();
+    ~AuthWindow() override;
 
     void navigateBarButtonClicked();
 

@@ -20,12 +20,12 @@ BankerWindow::BankerWindow(QWidget *parent) :
     rs->httpGet("banker", [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
         if (this->commonNetworkError(error)) return;
 
         if (error == QNetworkReply::ContentNotFoundError)
         {
-            if (!this->isVisible()) return;
             QMessageBox::critical(this,
             "Ошибка 404 (ContentNotFoundError)",
             "Инфомарция о таком банкире не была найдена! "
