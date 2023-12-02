@@ -11,11 +11,12 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    a.setWindowIcon(QIcon(":/img/img/economicgame.png"));
+
     QSettings settings("EconomicGame", "AuthSettings");
     QString role = settings.value("role").toString();
 
     QMainWindow *mainWindow;
-
     if (role == "teacher")
     {
         mainWindow = new TeacherWindow(nullptr);
@@ -32,7 +33,6 @@ int main(int argc, char *argv[])
     {
         mainWindow = new AuthWindow(nullptr);
     }
-
     mainWindow->show();
 
     return a.exec();

@@ -14,18 +14,56 @@ AuthWindow::AuthWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    eyeButton = new QToolButton(this);
+    eyeButton->setIcon(QIcon(":img/img/eye-password.png"));
+    eyeButton->setCursor(Qt::PointingHandCursor);
+    eyeButton->setStyleSheet(
+                            "QToolButton"
+                            "{"
+                            "background-color: #FFF;"
+                            "border: 0px;"
+                            "padding: 5px;"
+                            "border-radius: 5px;"
+                            "}"
+                            "QToolButton:hover:!pressed"
+                            "{"
+                            "background-color: #3F3F3F;"
+                            "}"
+                            "QToolButton:pressed"
+                            "{"
+                            "background-color: #9F9F9F;"
+                            "}"
+                            "QToolButton:disabled"
+                            "{"
+                            "background-color: #3F3F3F;"
+                            "};");
+    eyeButton->setToolTip("Показать пароль");
+    eyeButton->setIconSize(eyeButton->sizeHint());
+
+    QHBoxLayout *layout = new QHBoxLayout(ui->authLineEdit);
+    layout->addWidget(eyeButton, 0, Qt::AlignRight);
+    ui->authLineEdit->setLayout(layout);
+
+
     ui->stackedWidget->setCurrentIndex(0);
     this->setWindowTitle("Добро пожаловать!");
     QTimer::singleShot(1500, [this]()
     {
         this->setWindowTitle("Главная страница");
     });
+
+
     ui->authLineEdit->setFocus();
+
 
     connect(ui->navAuthButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
     connect(ui->navAboutButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
     connect(ui->navRulesButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
     connect(ui->navFaqButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
+
+    connect(eyeButton, &QToolButton::pressed, this, &AuthWindow::togglePasswordVisibilityPressed);
+    connect(eyeButton, &QToolButton::released, this, &AuthWindow::togglePasswordVisibilityReleased);
 
     connect(ui->authRequestButton, &QPushButton::clicked, this, &AuthWindow::authRequestButtonClicked);
 }
@@ -33,6 +71,23 @@ AuthWindow::AuthWindow(QWidget *parent) :
 AuthWindow::~AuthWindow()
 {
     delete ui;
+}
+
+
+
+void AuthWindow::togglePasswordVisibilityPressed()
+{
+    if (ui->authLineEdit->echoMode() == QLineEdit::Password)
+    {
+        ui->authLineEdit->setEchoMode(QLineEdit::Normal);
+    }
+}
+void AuthWindow::togglePasswordVisibilityReleased()
+{
+    if (ui->authLineEdit->echoMode() == QLineEdit::Normal)
+    {
+        ui->authLineEdit->setEchoMode(QLineEdit::Password);
+    }
 }
 
 

@@ -394,7 +394,7 @@ QFrame
        <item>
         <widget class="QFrame" name="payPersonFrame">
          <property name="styleSheet">
-          <string notr="true">QFrame
+          <string notr="true">#payPersonFrame
 {
 	border: 5px solid #BFFF00;
 	border-radius: 5px;
@@ -563,14 +563,7 @@ QListWidget QScrollBar:down-arrow:vertical
           <item>
            <widget class="QFrame" name="payPersonFrame_2">
             <property name="styleSheet">
-             <string notr="true">QFrame
-{
-	border: none;
-}
-
-
-
-QLineEdit
+             <string notr="true">QLineEdit
 {
 	border-radius: 0px;
 	border-bottom-left-radius: 5px;
@@ -685,7 +678,7 @@ QPushButton
        <item>
         <widget class="QFrame" name="otherActionsFrame">
          <property name="styleSheet">
-          <string notr="true">QFrame
+          <string notr="true">#otherActionsFrame
 {
 	border: 5px solid #BFFF00;
 	border-radius: 5px;
@@ -723,14 +716,7 @@ QPushButton
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">QFrame
-{
-	border: none;
-}
-
-
-
-QRadioButton
+             <string notr="true">QRadioButton
 {
     background-color: #78DBE2;
     color: white;
@@ -903,10 +889,7 @@ QRadioButton::indicator:checked
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">QFrame
-{
-	border: none;
-}</string>
+             <string notr="true"/>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>

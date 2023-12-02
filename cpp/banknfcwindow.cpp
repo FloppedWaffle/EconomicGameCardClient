@@ -146,11 +146,12 @@ void BankNFCWindow::personLineEditChanged()
     }
 
     QStringList stringList = personName.split(" ");
-    QJsonObject jsonObject;
-    jsonObject["firstname"] = stringList[0];
-    jsonObject["lastname"] = stringList[1];
+    QJsonObject jsonData;
+    jsonData["firstname"] = stringList[0];
+    jsonData["lastname"] = stringList[1];
+    jsonData["uid"] = m_nfcUID;
 
-    rs->httpPost("banker/get_transfer_player", jsonObject, [listWidget](QNetworkReply *reply)
+    rs->httpPost("banker/get_transfer_player", jsonData, [listWidget](QNetworkReply *reply)
     {
         QNetworkReply::NetworkError error = reply->error();
         if (error == QNetworkReply::NoError)
@@ -444,8 +445,11 @@ void BankNFCWindow::refreshWindow()
 
                 if (isFounder)
                 {
+                    int companyTaxes = jsonData["company_taxes"].toInt();
+
                     personInfo = personInfo +
-                    "Является владельцем фирмы" + "\n";
+                    "Является владельцем фирмы" + "\n"
+                    "Налоги фирмы: " + QString::number(companyTaxes) + " тлц";
                     ui->payTaxesButton->setDisabled(true);
                     ui->ministerSalaryButton->setDisabled(true);
                 }

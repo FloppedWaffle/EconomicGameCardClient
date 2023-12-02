@@ -61,10 +61,30 @@ void BankerWindow::nfcReaderButtonClicked()
         return;
     }
 
-
     QString uid = nfcMgr->getCardUID();
-    BankNFCWindow *nfcWindow = new BankNFCWindow(this, uid);
-    nfcWindow->show();
+    QJsonObject jsonObject;
+    jsonObject["uid"] = uid;
+
+    this->setInputsEnabled(false);
+    rs->httpPost("banker/get_person", jsonObject, [this, uid](QNetworkReply *reply)
+    {
+        this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
+        if (commonNetworkError(error)) return;
+
+        if (error == QNetworkReply::NoError)
+        {
+            BankNFCWindow *nfcWindow = new BankNFCWindow(this, uid);
+            nfcWindow->show();
+        }
+        else if (error == QNetworkReply::ContentNotFoundError)
+        {
+            QMessageBox::critical(nullptr,
+            "Ошибка 404 (ContentNotFoundError)",
+            "Инфомарция о таком человеке не была найдена! ");
+        }
+    });
 }
 
 
