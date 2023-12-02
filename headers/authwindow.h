@@ -3,6 +3,7 @@
 
 
 #include <QKeyEvent>
+#include <QToolButton>
 #include <QCryptographicHash>
 #include <QtNetwork>
 #include <functional>
@@ -27,7 +28,8 @@ public:
     ~AuthWindow() override;
 
     void navigateBarButtonClicked();
-
+    void togglePasswordVisibilityPressed();
+    void togglePasswordVisibilityReleased();
     void authRequestButtonClicked();
 
     void keyPressEvent(QKeyEvent *event) override;
@@ -36,6 +38,7 @@ public:
 
 private:
     Ui::AuthWindow *ui;
+    QToolButton *eyeButton;
 };
 
 #endif // AUTHWINDOW_H

@@ -72,13 +72,7 @@ void ServicePayWindow::serviceMinusButtonClicked()
     QStandardItem *item = m_model->itemFromIndex(ui->serviceListView->currentIndex());
     int serviceQuantity = item->data(Qt::UserRole + 1).toInt();
 
-    if (serviceQuantity <= 1)
-    {
-        QMessageBox::warning(this,
-        "Предупреждение!",
-        "Нельзя ставить количество товаров/услуг меньше единицы!");
-        return;
-    }
+    if (serviceQuantity <= 1) return;
 
     item->setData(serviceQuantity - 1, Qt::UserRole + 1);
     serviceListViewClicked();
@@ -97,9 +91,10 @@ void ServicePayWindow::servicePayButtonClicked()
         return;
     }
 
+
     QJsonObject jsonData;
     QJsonArray pairsArray;
-    jsonData["uid"] = nfcMgr->getCardUID();
+    jsonData["uid"] = isCard ? nfcMgr->getCardUID() : "";
 
     for (int row = 0; row < m_model->rowCount(); row++)
     {
@@ -114,8 +109,8 @@ void ServicePayWindow::servicePayButtonClicked()
 
         pairsArray.append(pairJsonObject);
     }
-
     jsonData["services"] = pairsArray;
+
 
     this->setInputsEnabled(false);
 

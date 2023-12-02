@@ -9,7 +9,6 @@ CustomWindow::CustomWindow(QWidget *parent) :
     nfcMgr(new NFCManager()),
     p_settings("EconomicGame", "AuthSettings")
 {
-    this->setWindowIcon(QIcon(":/img/img/economicgame.png"));
 
     bool prod = false;
     rs = new RequestSender(QUrl(prod ? "http://31.129.111.182:5000" : "http://192.168.1.187:5000"), this);
@@ -28,6 +27,7 @@ void CustomWindow::setInputsEnabled(const bool &boolean)
 {
     QList<QPushButton*> allPushButtons = this->findChildren<QPushButton*>();
     QList<QRadioButton*> allRadioButtons = this->findChildren<QRadioButton*>();
+    QList<QToolButton*> allToolButtons = this->findChildren<QToolButton*>();
     QList<QLineEdit*> allLines = this->findChildren<QLineEdit*>();
     QList<QListWidget*> allWidgets = this->findChildren<QListWidget*>();
     QList<QListView*> allViews = this->findChildren<QListView*>();
@@ -41,6 +41,10 @@ void CustomWindow::setInputsEnabled(const bool &boolean)
         for (QRadioButton *radioButton : allRadioButtons)
         {
             radioButton->setEnabled(true);
+        }
+        for (QToolButton *toolButton : allToolButtons)
+        {
+            toolButton->setEnabled(true);
         }
         for (QLineEdit *line : allLines)
         {
@@ -64,6 +68,10 @@ void CustomWindow::setInputsEnabled(const bool &boolean)
         for (QRadioButton *radioButton : allRadioButtons)
         {
             radioButton->setDisabled(true);
+        }
+        for (QToolButton *toolButton : allToolButtons)
+        {
+            toolButton->setDisabled(true);
         }
         for (QLineEdit *line : allLines)
         {

@@ -5,6 +5,7 @@
         <file>img/company.png</file>
         <file>img/economicgame.png</file>
         <file>img/bank.png</file>
+        <file>img/eye-password.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fonts/FiraSansCondensed-Medium.ttf</file>

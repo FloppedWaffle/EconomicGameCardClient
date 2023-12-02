@@ -108,18 +108,41 @@ void TeacherWindow::studentLineEditChanged()
 void TeacherWindow::payTalicButtonClicked()
 {
     QListWidgetItem *selectedItem = ui->studentsListWidget->currentItem();
-    if (!selectedItem)
+    if (!selectedItem && !nfcMgr->isCardAttached())
     {
         QMessageBox::warning(this,
         "Предупреждение!",
-        "Вы не выбрали ученика! "
-        "Выберите его в таблице слева, перед этим набрав его имя и фамилию в поле. Пример: \"Иван Иванов\" ");
+        "Вы не выбрали ученика из списка или его карта не была приложена к считывателю! "
+        "Выберите ученика в таблице слева, перед этим набрав его имя и фамилию в поле по этому примеру: \"Иван Иванов\". "
+        "Иначе просто приложите карту ученика к считывателю, если такой имеется.");
+        return;
+    }
+    if (selectedItem && nfcMgr->isCardAttached())
+    {
+        QMessageBox::warning(this,
+        "Предупреждение!",
+        "Вы одновременно приложили карту и выбрали ученика в списке. Выберите что-то одно: уберите карту, чтобы воспользоваться "
+        "списком или очистите текстовое поле, чтобы воспользоваться картой.");
         return;
     }
 
-    QString selectedId = selectedItem->data(Qt::UserRole).toString();
+
+    bool isCard;
     QJsonObject jsonData;
-    jsonData["player_id"] = selectedId;
+
+    if (selectedItem)
+    {
+        QString selectedId = selectedItem->data(Qt::UserRole).toString();
+        jsonData["player_id"] = selectedId;
+        isCard = false;
+    }
+    else
+    {
+        QString uid = nfcMgr->getCardUID();
+        jsonData["uid"] = uid;
+        isCard = true;
+    }
+    jsonData["is_card"] = isCard;
 
     int salary = 0;
     QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
@@ -136,6 +159,7 @@ void TeacherWindow::payTalicButtonClicked()
         salary = 30;
     }
     jsonData["salary"] = salary;
+
 
     this->setInputsEnabled(false);
 
@@ -167,18 +191,42 @@ void TeacherWindow::payTalicButtonClicked()
 void TeacherWindow::payTaxesButtonClicked()
 {
     QListWidgetItem *selectedItem = ui->studentsListWidget->currentItem();
-    if (!selectedItem)
+    if (!selectedItem && !nfcMgr->isCardAttached())
     {
         QMessageBox::warning(this,
         "Предупреждение!",
-        "Вы не выбрали ученика! "
-        "Выберите его в таблице слева, перед этим набрав его имя и фамилию в поле. Пример: \"Иван Иванов\" ");
+        "Вы не выбрали ученика из списка или его карта не была приложена к считывателю! "
+        "Выберите ученика в таблице слева, перед этим набрав его имя и фамилию в поле по этому примеру: \"Иван Иванов\". "
+        "Иначе просто приложите карту ученика к считывателю, если такой имеется.");
+        return;
+    }
+    if (selectedItem && nfcMgr->isCardAttached())
+    {
+        QMessageBox::warning(this,
+        "Предупреждение!",
+        "Вы одновременно приложили карту и выбрали ученика в списке. Выберите что-то одно: уберите карту, чтобы воспользоваться "
+        "списком или очистите текстовое поле, чтобы воспользоваться картой.");
         return;
     }
 
-    QString selectedId = ui->studentsListWidget->currentItem()->data(Qt::UserRole).toString();
+
+    bool isCard;
     QJsonObject jsonData;
-    jsonData["player_id"] = selectedId;
+
+    if (selectedItem)
+    {
+        QString selectedId = selectedItem->data(Qt::UserRole).toString();
+        jsonData["player_id"] = selectedId;
+        isCard = false;
+    }
+    else
+    {
+        QString uid = nfcMgr->getCardUID();
+        jsonData["uid"] = uid;
+        isCard = true;
+    }
+    jsonData["is_card"] = isCard;
+
 
     this->setInputsEnabled(false);
 
