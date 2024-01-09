@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>677</height>
+    <width>430</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -163,7 +163,7 @@ QPushButton::disabled
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="teacherPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">

@@ -6,6 +6,8 @@
         <file>img/economicgame.png</file>
         <file>img/bank.png</file>
         <file>img/eye-password.png</file>
+        <file>img/atm-denied.png</file>
+        <file>img/atm-success.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fonts/FiraSansCondensed-Medium.ttf</file>

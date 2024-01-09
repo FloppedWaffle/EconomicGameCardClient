@@ -5,6 +5,7 @@
 #include "teacherwindow.h"
 #include "companywindow.h"
 #include "bankerwindow.h"
+#include "atmwindow.h"
 
 
 
@@ -169,10 +170,16 @@ void AuthWindow::authRequestButtonClicked()
                 mainWindow = new CompanyWindow(nullptr);
                 this->deleteLater();
             }
-            else
+            else if (role == "banker")
             {
                 this->close();
                 mainWindow = new BankerWindow(nullptr);
+                this->deleteLater();
+            }
+            else
+            {
+                this->close();
+                mainWindow = new ATMWindow(nullptr);
                 this->deleteLater();
             }
 
