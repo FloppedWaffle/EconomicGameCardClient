@@ -76,7 +76,7 @@ void CompanyWindow::founderLineEditChanged()
     jsonData["firstname"] = stringList[0];
     jsonData["lastname"] = stringList[1];
 
-    rs->httpPost("company/get_founders", jsonData, [listWidget](QNetworkReply *reply)
+    rs->httpPost("companies/get_founders", jsonData, [listWidget](QNetworkReply *reply)
     {
         QNetworkReply::NetworkError error = reply->error();
         if (error == QNetworkReply::NoError)
@@ -131,7 +131,7 @@ void CompanyWindow::payFounder()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("company/pay_founder", jsonData, [this, withdraw](QNetworkReply *reply)
+    rs->httpPost("companies/pay_founder", jsonData, [this, withdraw](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -243,7 +243,7 @@ void CompanyWindow::refreshWindow()
 {
     this->setInputsEnabled(false);
 
-    rs->httpGet("company", [this](QNetworkReply *reply)
+    rs->httpGet("companies", [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;

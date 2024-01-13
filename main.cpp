@@ -18,15 +18,15 @@ int main(int argc, char *argv[])
     QString role = settings.value("role").toString();
 
     QMainWindow *mainWindow;
-    if (role == "teacher")
+    if (role == "teachers")
     {
         mainWindow = new TeacherWindow(nullptr);
     }
-    else if (role == "company")
+    else if (role == "companies")
     {
         mainWindow = new CompanyWindow(nullptr);
     }
-    else if (role == "banker")
+    else if (role == "bankers")
     {
         mainWindow = new BankerWindow(nullptr);
     }

@@ -18,8 +18,7 @@ public:
     explicit ATMWindow(QWidget *parent = nullptr);
     ~ATMWindow() override;
 
-    void checkIsUidSame();
-
+    void getPerson();
     void atmAccessButtonClicked();
 
     void personLineEditChanged();

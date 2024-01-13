@@ -79,7 +79,7 @@ void TeacherWindow::studentLineEditChanged()
     jsonObject["firstname"] = stringList[0];
     jsonObject["lastname"] = stringList[1];
 
-    rs->httpPost("teacher/get_students", jsonObject, [listWidget](QNetworkReply *reply)
+    rs->httpPost("teachers/get_students", jsonObject, [listWidget](QNetworkReply *reply)
     {
         QNetworkReply::NetworkError error = reply->error();
         if (error == QNetworkReply::NoError)
@@ -163,7 +163,7 @@ void TeacherWindow::payTalicButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("teacher/pay_student_salary", jsonData, [this, salary](QNetworkReply *reply)
+    rs->httpPost("teachers/pay_student_salary", jsonData, [this, salary](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -230,7 +230,7 @@ void TeacherWindow::payTaxesButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("teacher/pay_student_taxes", jsonData, [this](QNetworkReply *reply)
+    rs->httpPost("teachers/pay_student_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -259,7 +259,7 @@ void TeacherWindow::refreshWindow()
 {
     this->setInputsEnabled(false);
 
-    rs->httpGet("teacher", [this](QNetworkReply *reply)
+    rs->httpGet("teachers", [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;

@@ -114,7 +114,7 @@ void ServicePayWindow::servicePayButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("company/pay_services", jsonData, [this](QNetworkReply *reply)
+    rs->httpPost("companies/pay_services", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;

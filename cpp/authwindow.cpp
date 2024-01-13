@@ -158,28 +158,34 @@ void AuthWindow::authRequestButtonClicked()
             p_settings.setValue("role", role);
 
             QMainWindow *mainWindow;
-            if (role == "teacher")
+            if (role == "teachers")
             {
                 this->close();
                 mainWindow = new TeacherWindow(nullptr);
                 this->deleteLater();
             }
-            else if (role == "company")
+            else if (role == "companies")
             {
                 this->close();
                 mainWindow = new CompanyWindow(nullptr);
                 this->deleteLater();
             }
-            else if (role == "banker")
+            else if (role == "bankers")
             {
                 this->close();
                 mainWindow = new BankerWindow(nullptr);
                 this->deleteLater();
             }
-            else
+            else if (role == "atm")
             {
                 this->close();
                 mainWindow = new ATMWindow(nullptr);
+                this->deleteLater();
+            }
+            else
+            {
+                this->close();
+                mainWindow = new AuthWindow(nullptr);
                 this->deleteLater();
             }
 

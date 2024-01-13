@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>777</width>
+    <width>811</width>
     <height>771</height>
    </rect>
   </property>
@@ -817,6 +817,9 @@ QPushButton:disabled
          </property>
          <property name="maxLength">
           <number>64</number>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
          </property>
          <property name="placeholderText">
           <string>Код для выхода</string>

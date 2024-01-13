@@ -17,7 +17,7 @@ BankerWindow::BankerWindow(QWidget *parent) :
 
 
     this->setInputsEnabled(false);
-    rs->httpGet("banker", [this](QNetworkReply *reply)
+    rs->httpGet("bankers", [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -66,7 +66,7 @@ void BankerWindow::nfcReaderButtonClicked()
     jsonObject["uid"] = uid;
 
     this->setInputsEnabled(false);
-    rs->httpPost("banker/get_person", jsonObject, [this, uid](QNetworkReply *reply)
+    rs->httpPost("bankers/get_person", jsonObject, [this, uid](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;

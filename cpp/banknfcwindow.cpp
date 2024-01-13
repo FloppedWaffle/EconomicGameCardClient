@@ -88,7 +88,7 @@ void BankNFCWindow::transferMoney()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/transfer_money", jsonData, [this, transferAction, transferAmount](QNetworkReply *reply)
+    rs->httpPost("bankers/transfer_money", jsonData, [this, transferAction, transferAmount](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -151,7 +151,7 @@ void BankNFCWindow::personLineEditChanged()
     jsonData["lastname"] = stringList[1];
     jsonData["uid"] = m_nfcUID;
 
-    rs->httpPost("banker/get_transfer_player", jsonData, [listWidget](QNetworkReply *reply)
+    rs->httpPost("bankers/get_transfer_player", jsonData, [listWidget](QNetworkReply *reply)
     {
         QNetworkReply::NetworkError error = reply->error();
         if (error == QNetworkReply::NoError)
@@ -207,7 +207,7 @@ void BankNFCWindow::personTransferButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/transfer_player_money", jsonData, [this, amount, selectedId](QNetworkReply *reply)
+    rs->httpPost("bankers/transfer_player_money", jsonData, [this, amount, selectedId](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -251,7 +251,7 @@ void BankNFCWindow::payTaxesButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/pay_player_taxes", jsonData, [this](QNetworkReply *reply)
+    rs->httpPost("bankers/pay_player_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -304,7 +304,7 @@ void BankNFCWindow::companyTaxButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/pay_company_taxes", jsonData, [this](QNetworkReply *reply)
+    rs->httpPost("bankers/pay_company_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -350,6 +350,14 @@ void BankNFCWindow::companyTaxButtonClicked()
             "Ошибка 400 (ProtocolInvalidOperationError)",
             "Недостаточно средств для уплаты налога!");
         }
+        else
+        {
+            QString errorString = reply->errorString();
+            QMessageBox::critical(this, errorString,
+            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            this->close();
+            this->deleteLater();
+        }
 
         refreshWindow();
     });
@@ -367,7 +375,7 @@ void BankNFCWindow::ministerSalaryButtonClicked()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/pay_minister_salary", jsonData, [this](QNetworkReply *reply)
+    rs->httpPost("bankers/pay_minister_salary", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
@@ -392,6 +400,14 @@ void BankNFCWindow::ministerSalaryButtonClicked()
             "Ошибка 404 (ContentNotFoundError)",
             "К сожалению, министр не был найден.");
         }
+        else
+        {
+            QString errorString = reply->errorString();
+            QMessageBox::critical(this, errorString,
+            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            this->close();
+            this->deleteLater();
+        }
 
         refreshWindow();
     });
@@ -408,7 +424,7 @@ void BankNFCWindow::refreshWindow()
 
     this->setInputsEnabled(false);
 
-    rs->httpPost("banker/get_person", jsonObject, [this](QNetworkReply *reply)
+    rs->httpPost("bankers/get_person", jsonObject, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
         if (!this->isVisible()) return;
