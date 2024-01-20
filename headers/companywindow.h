@@ -3,6 +3,7 @@
 
 #include <QStandardItemModel>
 #include <QKeyEvent>
+#include <QDate>
 
 #include "customwindow.h"
 

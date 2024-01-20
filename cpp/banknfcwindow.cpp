@@ -472,7 +472,7 @@ void BankNFCWindow::refreshWindow()
                 else if (isMinister)
                 {
                     personInfo = personInfo +
-                    "Является министром" + "\n"
+                    "Является государственным служащим" + "\n"
                     "Зарплата " + (isMinisterPaid ? "выплачена" : "не выплачена") + "\n";
                     ui->payTaxesButton->setDisabled(true);
                     ui->companyTaxLineEdit->setDisabled(true);

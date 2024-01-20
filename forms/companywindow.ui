@@ -60,7 +60,7 @@
 
 QPushButton
 {
-    background-color: #CB343C;
+    background-color: #F37A48;
     color: white;
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
@@ -69,12 +69,12 @@ QPushButton
 
 QPushButton:hover:!pressed
 {
-	background-color: #B62F36;
+	background-color: #F16427;
 }
 
 QPushButton:pressed
 {
-	background-color: #E0858A;
+	background-color: #F6986F;
 	color: black;
 }
 
@@ -173,7 +173,7 @@ QPushButton::disabled
           <property name="styleSheet">
            <string notr="true">QLabel
 {
-	border: 5px solid #CB343C;
+	border: 5px solid #F37A48;
 	border-radius: 5px;
 }</string>
           </property>
@@ -385,7 +385,7 @@ QPushButton::disabled
              <property name="styleSheet">
               <string notr="true">QTextBrowser
 {
-	border: 5px solid #CB343C;
+	border: 5px solid #F37A48;
 	border-radius: 5px;
 }
 
@@ -675,18 +675,18 @@ QLineEdit:disabled
 
 QPushButton
 {
-    background-color: #CB343C;
+    background-color: #F37A48;
     color: white;
 	border: none;
 	padding: 15px;
 }
 QPushButton:hover:!pressed
 {
-	background-color: #B62F36;
+	background-color: #F16427;
 }
 QPushButton:pressed
 {
-	background-color: #E0858A;
+	background-color: #F6986F;
 	color: black;
 }
 QPushButton::disabled
@@ -700,8 +700,8 @@ QListWidget,
 QListView
 {
 	color: #212529;
-	background-color: #A22A30;
-	border: 5px solid #A22A30;
+	background-color: #F16427;
+	border: 5px solid #F16427;
 }
 QListWidget:disabled,
 QListView:disabled
@@ -719,7 +719,7 @@ QListView::item
 	border-radius: 5px;
 	background-color: white;
 	color: black;
-	border: 3px solid #A22A30;
+	border: 3px solid #F16427;
 	padding: 3px;
 	margin-right: 5px;
 }
@@ -744,7 +744,7 @@ QListView QScrollBar:vertical {
 }
 QListWidget QScrollBar:handle:vertical,
 QListView QScrollBar:handle:vertical {
-    background: #A7FC00;
+    background: #42AAFF;
 	border-radius: 5px;
 }
 QListWidget QScrollBar:add-line:vertical,
@@ -753,7 +753,7 @@ QListView QScrollBar:add-line:vertical,
 QListView QScrollBar:sub-line:vertical
 {
 	border: none;
-    background: #A7FC00;
+    background: #42AAFF;
 	border-radius: 5px;
 }
 QListWidget QScrollBar:up-arrow:vertical,
@@ -768,7 +768,7 @@ QListView QScrollBar:down-arrow:vertical
 
 QListView::indicator:checked
 {
-	background-color: #A22A30;
+	background-color: #F16427;
 }</string>
           </property>
           <property name="frameShape">
@@ -1296,7 +1296,7 @@ QPushButton:disabled
        <property name="styleSheet">
         <string notr="true">QTextBrowser
 {
-	border: 5px solid #CB343C;
+	border: 5px solid #F37A48;
 	border-radius: 5px;
 }
 

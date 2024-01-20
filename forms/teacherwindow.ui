@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>430</width>
-    <height>736</height>
+    <height>796</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -520,7 +520,7 @@ QLineEdit:disabled
               <number>64</number>
              </property>
              <property name="placeholderText">
-              <string>Имя и фамилия ученика (с больших букв)</string>
+              <string>Имя и фамилия игрока (с больших букв):</string>
              </property>
             </widget>
            </item>
@@ -688,6 +688,43 @@ QPushButton::disabled
                  <property name="bottomMargin">
                   <number>0</number>
                  </property>
+                 <item>
+                  <widget class="QPushButton" name="payFiveButton">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Fira Sans Condensed</family>
+                     <pointsize>16</pointsize>
+                    </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true"/>
+                   </property>
+                   <property name="text">
+                    <string>Заплатить 5 талиц</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item>
                   <widget class="QPushButton" name="payTenButton">
                    <property name="sizePolicy">

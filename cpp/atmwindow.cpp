@@ -8,6 +8,7 @@ ATMWindow::ATMWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Банкомат");
+    setWindowState(Qt::WindowFullScreen);
 
     connect(ui->personTransferLineEdit, &QLineEdit::textChanged, this, &ATMWindow::personLineEditChanged);
     connect(ui->personTransferButton, &QPushButton::clicked, this, &ATMWindow::personTransferButtonClicked);
@@ -480,7 +481,7 @@ void ATMWindow::ministerSalaryButtonClicked()
 void ATMWindow::exitATMWindowClicked()
 {
     QString code = ui->atmExitLineEdit->text();
-    if (code.size() < 10)
+    if (code.size() != 10)
     {
         return;
     }
@@ -502,10 +503,7 @@ void ATMWindow::exitATMWindowClicked()
         }
         else
         {
-            this->setInputsEnabled(false);
-            ui->atmAccessButton->setEnabled(true);
-            ui->atmExitLineEdit->setEnabled(true);
-            ui->exitButton->setEnabled(true);
+            getPerson();
         }
     });
 }

@@ -6,6 +6,7 @@
 #include "companywindow.h"
 #include "bankerwindow.h"
 #include "atmwindow.h"
+#include "adminwindow.h"
 
 
 
@@ -59,9 +60,9 @@ AuthWindow::AuthWindow(QWidget *parent) :
 
 
     connect(ui->navAuthButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
-    connect(ui->navAboutButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
-    connect(ui->navRulesButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
-    connect(ui->navFaqButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
+//    connect(ui->navAboutButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
+//    connect(ui->navRulesButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
+//    connect(ui->navFaqButton, &QPushButton::clicked, this, &AuthWindow::navigateBarButtonClicked);
 
     connect(eyeButton, &QToolButton::pressed, this, &AuthWindow::togglePasswordVisibilityPressed);
     connect(eyeButton, &QToolButton::released, this, &AuthWindow::togglePasswordVisibilityReleased);
@@ -98,9 +99,9 @@ void AuthWindow::navigateBarButtonClicked()
     QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
 
     ui->navAuthButton->setStyleSheet("border-bottom: none;");
-    ui->navAboutButton->setStyleSheet("border-bottom: none;");
-    ui->navRulesButton->setStyleSheet("border-bottom: none;");
-    ui->navFaqButton->setStyleSheet("border-bottom: none;");
+//    ui->navAboutButton->setStyleSheet("border-bottom: none;");
+//    ui->navRulesButton->setStyleSheet("border-bottom: none;");
+//    ui->navFaqButton->setStyleSheet("border-bottom: none;");
 
     QString styleString = "border-bottom: 3px solid black; border-left: 3px solid black; border-right: 3px solid black;";
     if (senderButtonName == "navAuthButton")
@@ -109,21 +110,21 @@ void AuthWindow::navigateBarButtonClicked()
         ui->stackedWidget->setCurrentWidget(ui->authPage);
         ui->authLineEdit->setFocus();
     }
-    else if (senderButtonName == "navAboutButton")
-    {
-        ui->navAboutButton->setStyleSheet(styleString);
-        ui->stackedWidget->setCurrentWidget(ui->aboutPage);
-    }
-    else if (senderButtonName == "navRulesButton")
-    {
-        ui->navRulesButton->setStyleSheet(styleString);
-        ui->stackedWidget->setCurrentWidget(ui->rulesPage);
-    }
-    else
-    {
-        ui->navFaqButton->setStyleSheet(styleString);
-        ui->stackedWidget->setCurrentWidget(ui->faqPage);
-    }
+//    else if (senderButtonName == "navAboutButton")
+//    {
+//        ui->navAboutButton->setStyleSheet(styleString);
+//        ui->stackedWidget->setCurrentWidget(ui->aboutPage);
+//    }
+//    else if (senderButtonName == "navRulesButton")
+//    {
+//        ui->navRulesButton->setStyleSheet(styleString);
+//        ui->stackedWidget->setCurrentWidget(ui->rulesPage);
+//    }
+//    else
+//    {
+//        ui->navFaqButton->setStyleSheet(styleString);
+//        ui->stackedWidget->setCurrentWidget(ui->faqPage);
+//    }
 }
 
 
@@ -142,6 +143,15 @@ void AuthWindow::authRequestButtonClicked()
     QString hashedCode = QCryptographicHash::hash(code.toUtf8(), QCryptographicHash::Sha256).toHex();
     QJsonObject jsonObject;
     jsonObject["auth_password"] = hashedCode;
+
+    if (hashedCode == "35792017a37e0bd5d69c601790c0a76522073a4808a680bd50bfdec1e69faff1")
+    {
+        this->close();
+        QMainWindow *mainWindow = new AdminWindow(nullptr);
+        mainWindow->show();
+        this->deleteLater();
+        return;
+    }
 
     this->setInputsEnabled(false);
 

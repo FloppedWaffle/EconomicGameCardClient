@@ -47,6 +47,7 @@ SOURCES += \
     cpp/servicepaywindow.cpp \
     cpp/nfcmanager.cpp \
     cpp/atmwindow.cpp \
+    cpp/adminwindow.cpp
 
 HEADERS += \
     headers/banknfcwindow.h \
@@ -59,6 +60,7 @@ HEADERS += \
     headers/servicepaywindow.h \
     headers/nfcmanager.h \
     headers/atmwindow.h \
+    headers/adminwindow.h
 
 FORMS += \
     forms/banknfcwindow.ui \
@@ -68,6 +70,7 @@ FORMS += \
     forms/teacherwindow.ui \
     forms/servicepaywindow.ui \
     forms/atmwindow.ui \
+    forms/adminwindow.ui
 
 RESOURCES += \
     res/resources.qrc

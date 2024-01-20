@@ -3,8 +3,6 @@
 #include "teacherwindow.h"
 #include "authwindow.h"
 
-#include <QTextCursor>
-
 TeacherWindow::TeacherWindow(QWidget *parent) :
     CustomWindow(parent),
     ui(new Ui::TeacherWindow)
@@ -21,6 +19,7 @@ TeacherWindow::TeacherWindow(QWidget *parent) :
 
     connect(ui->studentLineEdit, &QLineEdit::textChanged, this, &TeacherWindow::studentLineEditChanged);
 
+    connect(ui->payFiveButton, &QPushButton::clicked, this, &TeacherWindow::payTalicButtonClicked);
     connect(ui->payTenButton, &QPushButton::clicked, this, &TeacherWindow::payTalicButtonClicked);
     connect(ui->payTwentyButton, &QPushButton::clicked, this, &TeacherWindow::payTalicButtonClicked);
     connect(ui->payThirtyButton, &QPushButton::clicked, this, &TeacherWindow::payTalicButtonClicked);
@@ -108,45 +107,30 @@ void TeacherWindow::studentLineEditChanged()
 void TeacherWindow::payTalicButtonClicked()
 {
     QListWidgetItem *selectedItem = ui->studentsListWidget->currentItem();
-    if (!selectedItem && !nfcMgr->isCardAttached())
+    if (!selectedItem)
     {
         QMessageBox::warning(this,
         "Предупреждение!",
-        "Вы не выбрали ученика из списка или его карта не была приложена к считывателю! "
-        "Выберите ученика в таблице слева, перед этим набрав его имя и фамилию в поле по этому примеру: \"Иван Иванов\". "
-        "Иначе просто приложите карту ученика к считывателю, если такой имеется.");
-        return;
-    }
-    if (selectedItem && nfcMgr->isCardAttached())
-    {
-        QMessageBox::warning(this,
-        "Предупреждение!",
-        "Вы одновременно приложили карту и выбрали ученика в списке. Выберите что-то одно: уберите карту, чтобы воспользоваться "
-        "списком или очистите текстовое поле, чтобы воспользоваться картой.");
+        "Вы не выбрали ученика из списка! "
+        "Выберите ученика в таблице слева, перед этим набрав его имя и фамилию в поле по этому примеру: \"Иван Иванов\". ");
         return;
     }
 
-
-    bool isCard;
     QJsonObject jsonData;
 
     if (selectedItem)
     {
         QString selectedId = selectedItem->data(Qt::UserRole).toString();
         jsonData["player_id"] = selectedId;
-        isCard = false;
     }
-    else
-    {
-        QString uid = nfcMgr->getCardUID();
-        jsonData["uid"] = uid;
-        isCard = true;
-    }
-    jsonData["is_card"] = isCard;
 
     int salary = 0;
     QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
-    if (senderButtonName == "payTenButton")
+    if (senderButtonName == "payFiveButton")
+    {
+        salary = 5;
+    }
+    else if (senderButtonName == "payTenButton")
     {
         salary = 10;
     }
@@ -273,6 +257,11 @@ void TeacherWindow::refreshWindow()
             QString teacherName =  jsonData["name"].toString();
             QString teacherBalance = jsonData["balance"].toString();
             QString teacherSubjectName = jsonData["subject_name"].toString();
+
+            if (QDate::currentDate() > QDate(QDate::currentDate().year(), 2, 12))
+            {
+                ui->payFiveButton->setDisabled(true);
+            }
 
             if (ui->teacherName->text() != teacherName)
             {

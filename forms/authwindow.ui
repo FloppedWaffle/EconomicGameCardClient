@@ -147,66 +147,6 @@ QPushButton:disabled
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="navAboutButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Fira Sans Condensed</family>
-           <pointsize>18</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string>Об игре</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="navRulesButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Fira Sans Condensed</family>
-           <pointsize>18</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Правила</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="navFaqButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Fira Sans Condensed</family>
-           <pointsize>18</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>ЧаВо (FAQ)</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
