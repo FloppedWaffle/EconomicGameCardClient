@@ -1,3 +1,4 @@
 *.user*
 *.stash*
 build
+deploy/old_versions
