@@ -57,7 +57,7 @@ QLineEdit:disabled
 QPushButton,
 QRadioButton
 {
-    background-color: #F37A48;
+    background-color: #F3753F;
     color: white;
 	border: none;
 	padding: 15px;
@@ -148,7 +148,7 @@ QListView QScrollBar:down-arrow:vertical
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QListView" name="serviceListView">
+     <widget class="QListView" name="servicesListView">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -221,6 +221,9 @@ QListView QScrollBar:down-arrow:vertical
          </property>
          <property name="maxLength">
           <number>64</number>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
          <property name="readOnly">
           <bool>true</bool>
@@ -446,6 +449,9 @@ QRadioButton::indicator:checked
          </property>
          <property name="maxLength">
           <number>64</number>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
          <property name="readOnly">
           <bool>true</bool>

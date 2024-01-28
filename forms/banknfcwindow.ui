@@ -101,12 +101,14 @@ QTextBrowser
 
 
 
-QTextBrowser QScrollBar:vertical {
+QTextBrowser QScrollBar:vertical
+{
 	border: none;
     background: #3F3F3F;
 	border-radius: 5px;
 }
-QTextBrowser QScrollBar:handle:vertical {
+QTextBrowser QScrollBar:handle:vertical
+{
     background: #BFFF00;
 	border-radius: 5px;
 }
@@ -192,6 +194,9 @@ QTextBrowser QScrollBar:down-arrow:vertical
            <family>Fira Sans Condensed</family>
            <pointsize>18</pointsize>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
          </property>
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>

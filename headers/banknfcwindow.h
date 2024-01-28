@@ -22,7 +22,7 @@ public:
     ~BankNFCWindow() override;
 
 
-    void checkIsUidSame();
+    bool checkIsUidSame();
 
     void transferMoney();
 

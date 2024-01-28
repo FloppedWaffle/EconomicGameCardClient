@@ -65,7 +65,6 @@ void TeacherWindow::studentLineEditChanged()
 {
     QListWidget *listWidget = ui->studentsListWidget;
     QString studentName = ui->studentLineEdit->text();
-
     listWidget->clear();
 
     if (studentName.split(" ").size() != 2)
@@ -116,13 +115,9 @@ void TeacherWindow::payTalicButtonClicked()
         return;
     }
 
+    QString selectedId = selectedItem->data(Qt::UserRole).toString();
     QJsonObject jsonData;
-
-    if (selectedItem)
-    {
-        QString selectedId = selectedItem->data(Qt::UserRole).toString();
-        jsonData["player_id"] = selectedId;
-    }
+    jsonData["player_id"] = selectedId;
 
     int salary = 0;
     QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
@@ -144,9 +139,7 @@ void TeacherWindow::payTalicButtonClicked()
     }
     jsonData["salary"] = salary;
 
-
     this->setInputsEnabled(false);
-
     rs->httpPost("teachers/pay_student_salary", jsonData, [this, salary](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -165,7 +158,6 @@ void TeacherWindow::payTalicButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->closeWindowsOpenAuth();
         }
     });
 }
@@ -175,45 +167,20 @@ void TeacherWindow::payTalicButtonClicked()
 void TeacherWindow::payTaxesButtonClicked()
 {
     QListWidgetItem *selectedItem = ui->studentsListWidget->currentItem();
-    if (!selectedItem && !nfcMgr->isCardAttached())
+    if (!selectedItem)
     {
         QMessageBox::warning(this,
         "Предупреждение!",
-        "Вы не выбрали ученика из списка или его карта не была приложена к считывателю! "
-        "Выберите ученика в таблице слева, перед этим набрав его имя и фамилию в поле по этому примеру: \"Иван Иванов\". "
-        "Иначе просто приложите карту ученика к считывателю, если такой имеется.");
-        return;
-    }
-    if (selectedItem && nfcMgr->isCardAttached())
-    {
-        QMessageBox::warning(this,
-        "Предупреждение!",
-        "Вы одновременно приложили карту и выбрали ученика в списке. Выберите что-то одно: уберите карту, чтобы воспользоваться "
-        "списком или очистите текстовое поле, чтобы воспользоваться картой.");
+        "Вы не выбрали ученика из списка! "
+        "Выберите ученика в таблице слева, перед этим набрав его имя и фамилию в поле по этому примеру: \"Иван Иванов\". ");
         return;
     }
 
-
-    bool isCard;
+    QString selectedId = selectedItem->data(Qt::UserRole).toString();
     QJsonObject jsonData;
-
-    if (selectedItem)
-    {
-        QString selectedId = selectedItem->data(Qt::UserRole).toString();
-        jsonData["player_id"] = selectedId;
-        isCard = false;
-    }
-    else
-    {
-        QString uid = nfcMgr->getCardUID();
-        jsonData["uid"] = uid;
-        isCard = true;
-    }
-    jsonData["is_card"] = isCard;
-
+    jsonData["player_id"] = selectedId;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("teachers/pay_student_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -232,7 +199,6 @@ void TeacherWindow::payTaxesButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->closeWindowsOpenAuth();
         }
     });
 }
@@ -242,7 +208,6 @@ void TeacherWindow::payTaxesButtonClicked()
 void TeacherWindow::refreshWindow()
 {
     this->setInputsEnabled(false);
-
     rs->httpGet("teachers", [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -253,7 +218,6 @@ void TeacherWindow::refreshWindow()
         if (error == QNetworkReply::NoError)
         {
             QJsonDocument jsonData = QJsonDocument::fromJson(reply->readAll());
-
             QString teacherName =  jsonData["name"].toString();
             QString teacherBalance = jsonData["balance"].toString();
             QString teacherSubjectName = jsonData["subject_name"].toString();
@@ -263,21 +227,12 @@ void TeacherWindow::refreshWindow()
                 ui->payFiveButton->setDisabled(true);
             }
 
-            if (ui->teacherName->text() != teacherName)
-            {
-                ui->teacherName->setText("Имя и отчество: " + teacherName);
-            }
-            if (ui->teacherBalance->text() != teacherBalance)
-            {
-                ui->teacherBalance->setText("Ваш личный баланс: " + teacherBalance + " тлц");
-            }
-            if (ui->teacherSubjectName->toPlainText() != teacherSubjectName)
-            {
-                ui->teacherSubjectName->setPlainText("Название вашего предприятия:");
-                ui->teacherSubjectName->setAlignment(Qt::AlignCenter);
-                ui->teacherSubjectName->append(teacherSubjectName);
-                ui->teacherSubjectName->setAlignment(Qt::AlignCenter);
-            }
+            ui->teacherName->setText("Имя и отчество: " + teacherName);
+            ui->teacherBalance->setText("Ваш личный баланс: " + teacherBalance + " тлц");
+            ui->teacherSubjectName->setPlainText("Название вашего предприятия:");
+            ui->teacherSubjectName->setAlignment(Qt::AlignCenter);
+            ui->teacherSubjectName->append(teacherSubjectName);
+            ui->teacherSubjectName->setAlignment(Qt::AlignCenter);
         }
         else if (error == QNetworkReply::ContentNotFoundError)
         {
@@ -292,7 +247,6 @@ void TeacherWindow::refreshWindow()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->closeWindowsOpenAuth();
         }
     });
 }

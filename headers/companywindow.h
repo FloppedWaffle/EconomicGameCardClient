@@ -30,6 +30,7 @@ public:
     void payFounder();
 
     void serviceLineEditChanged();
+    void servicesListViewClicked();
     void payService();
 
     void refreshWindow();

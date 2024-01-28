@@ -52,6 +52,7 @@ AuthWindow::AuthWindow(QWidget *parent) :
     this->setWindowTitle("Добро пожаловать!");
     QTimer::singleShot(1500, [this]()
     {
+        if (!this->isVisible()) return;
         this->setWindowTitle("Главная страница");
     });
 
@@ -144,7 +145,7 @@ void AuthWindow::authRequestButtonClicked()
     QJsonObject jsonObject;
     jsonObject["auth_password"] = hashedCode;
 
-    if (hashedCode == "35792017a37e0bd5d69c601790c0a76522073a4808a680bd50bfdec1e69faff1")
+    if (hashedCode == "a5756b24b3f207f8e30f3c51c5cf052dbb07073ca703c1862094b45556d33055")
     {
         this->close();
         QMainWindow *mainWindow = new AdminWindow(nullptr);
@@ -157,7 +158,12 @@ void AuthWindow::authRequestButtonClicked()
 
     rs->httpPost("auth", jsonObject, [this](QNetworkReply *reply)
     {
+        this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
         QNetworkReply::NetworkError error = reply->error();
+        if (this->commonNetworkError(error)) return;
+
+
         if (error == QNetworkReply::NoError)
         {
             QJsonDocument jsonData = QJsonDocument::fromJson(reply->readAll());
@@ -202,36 +208,21 @@ void AuthWindow::authRequestButtonClicked()
             mainWindow->show();
             return;
         }
-        else if (error == QNetworkReply::AuthenticationRequiredError)
+        else if (error == QNetworkReply::ProtocolInvalidOperationError)
         {
             QMessageBox::critical(this,
-            "Ошибка 401 (AuthenticationRequiredError)",
+            "Ошибка 400 (ProtocolInvalidOperationError)",
             "Неправильный код авторизации! "
             "Попробуйте проверить корректность вводимого вами кода.");
-        }
-        else if (error == QNetworkReply::ConnectionRefusedError)
-        {
-            QMessageBox::critical(this,
-            "Ошибка (ConnectionRefusedError)",
-            "Сервер отклонил запрос! "
-            "Возможно, сервер не был запущен или только-только настраивается. Ожидайте!");
-        }
-        else if (error == QNetworkReply::TimeoutError ||
-                 error == QNetworkReply::OperationCanceledError)
-        {
-            QMessageBox::critical(this,
-            "Ошибка (TimeoutError или OperationCanceledError)",
-            "В данный момент сервер недоступен! "
-            "Попробуйте авторизоваться позже.");
         }
         else
         {
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
+            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
         }
 
-        this->setInputsEnabled(true);
+
         this->setFocus();
         ui->authLineEdit->setFocus();
     });

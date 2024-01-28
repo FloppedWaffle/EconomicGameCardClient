@@ -199,7 +199,6 @@ void ATMWindow::atmAccessButtonClicked()
     }
 
     m_nfcUID = nfcMgr->getCardUID();
-
     getPerson();
 }
 
@@ -211,7 +210,6 @@ void ATMWindow::personLineEditChanged()
 
     QListWidget *listWidget = ui->personsListWidget;
     QString personName = ui->personTransferLineEdit->text();
-
     listWidget->clear();
 
     if (personName.split(" ").size() != 2)
@@ -280,7 +278,6 @@ void ATMWindow::personTransferButtonClicked()
     jsonData["amount"] = amount;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("atm/transfer_player_money", jsonData, [this, amount, selectedId](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -321,7 +318,6 @@ void ATMWindow::payTaxesButtonClicked()
     jsonData["uid"] = m_nfcUID;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("bankers/pay_player_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -371,7 +367,6 @@ void ATMWindow::companyTaxButtonClicked()
     jsonData["tax_amount"] = taxAmount;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("atm/pay_company_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -439,7 +434,6 @@ void ATMWindow::ministerSalaryButtonClicked()
     jsonData["uid"] = m_nfcUID;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("atm/pay_minister_salary", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);

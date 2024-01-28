@@ -39,7 +39,7 @@ BankNFCWindow::~BankNFCWindow()
 
 
 
-void BankNFCWindow::checkIsUidSame()
+bool BankNFCWindow::checkIsUidSame()
 {
     if (!nfcMgr->isCardAttached())
     {
@@ -49,7 +49,7 @@ void BankNFCWindow::checkIsUidSame()
         "Карта должна быть всегда приложена к считывателю до окончания работы с ней.");
         this->close();
         this->deleteLater();
-        return;
+        return true;
     }
 
     if (nfcMgr->getCardUID() != m_nfcUID)
@@ -57,37 +57,38 @@ void BankNFCWindow::checkIsUidSame()
         QMessageBox::critical(this,
         "Ошибка!",
         "Несоответствующая карта! "
-        "Вы приложили другую карту вместо той, чтобы изначально.");
+        "Вы приложили другую карту вместо той, которая была изначально.");
         this->close();
         this->deleteLater();
-        return;
+        return true;
     }
+
+    return false;
 }
 
 
 
 void BankNFCWindow::transferMoney()
 {
-    checkIsUidSame();
+    if (checkIsUidSame()) return;
 
     int transferAmount = ui->transferAmountLineEdit->text().toInt();
     if (transferAmount < 1)
     {
-        QMessageBox::warning(this, "Предупреждение!",
+        QMessageBox::warning(this,
+        "Предупреждение!",
         "В этом поле допустимы только натуральные положительные числа!");
         return;
     }
 
     QString senderButtonName = qobject_cast<QPushButton*>(sender())->objectName();
     QString transferAction = senderButtonName == "depositButton" ? "deposit" : "withdraw";
-
     QJsonObject jsonData;
     jsonData["uid"] = m_nfcUID;
     jsonData["amount"] = transferAmount;
     jsonData["transfer_action"] = transferAction;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("bankers/transfer_money", jsonData, [this, transferAction, transferAmount](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -100,8 +101,10 @@ void BankNFCWindow::transferMoney()
         {
             QMessageBox::information(this,
             "Успешно!",
-            QString("%1 средств в размере %2 тлц было выполнено.")
-            .arg(transferAction == "deposit" ? "Зачисление" : "Вывод").arg(transferAmount));
+            QString("%1 средств в размере %2 тлц %3 успешно.")
+            .arg(transferAction == "deposit" ? "Зачисление" : "Вывод")
+            .arg(transferAmount)
+            .arg(transferAction == "deposit" ? "было проведено" : "был проведён"));
         }
         else if (error == QNetworkReply::ProtocolInvalidOperationError)
         {
@@ -110,21 +113,11 @@ void BankNFCWindow::transferMoney()
             "Недостаточно талиц для вывода! "
             "Введите число меньше.");
         }
-        else if (error == QNetworkReply::ContentNotFoundError)
-        {
-            QMessageBox::critical(nullptr,
-            "Ошибка 404 (ContentNotFoundError)",
-            "Инфомарция о таком человеке не была найдена! ");
-            this->close();
-            this->deleteLater();
-        }
         else
         {
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->close();
-            this->deleteLater();
         }
 
         refreshWindow();
@@ -179,7 +172,7 @@ void BankNFCWindow::personLineEditChanged()
 
 void BankNFCWindow::personTransferButtonClicked()
 {
-    checkIsUidSame();
+    if (checkIsUidSame()) return;
 
     QListWidgetItem *selectedItem = ui->personsListWidget->currentItem();
     if (!selectedItem)
@@ -206,7 +199,6 @@ void BankNFCWindow::personTransferButtonClicked()
     jsonData["amount"] = amount;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("bankers/transfer_player_money", jsonData, [this, amount, selectedId](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -231,8 +223,6 @@ void BankNFCWindow::personTransferButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->close();
-            this->deleteLater();
         }
 
         refreshWindow();
@@ -243,14 +233,13 @@ void BankNFCWindow::personTransferButtonClicked()
 
 void BankNFCWindow::payTaxesButtonClicked()
 {
-    checkIsUidSame();
+    if (checkIsUidSame()) return;
 
     QJsonObject jsonData;
     jsonData["uid"] = m_nfcUID;
     jsonData["is_card"] = ui->cardRadio->isChecked();
 
     this->setInputsEnabled(false);
-
     rs->httpPost("bankers/pay_player_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -266,8 +255,8 @@ void BankNFCWindow::payTaxesButtonClicked()
         }
         else if (error == QNetworkReply::ProtocolInvalidOperationError)
         {
-            QMessageBox::critical(this,
-            "Ошибка 400 (ProtocolInvalidOperationError)",
+            QMessageBox::warning(this,
+            "Предупреждение!",
             "Налоги игрока уже были уплачены за этот период!");
         }
         else
@@ -275,8 +264,6 @@ void BankNFCWindow::payTaxesButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->close();
-            this->deleteLater();
         }
 
         refreshWindow();
@@ -287,7 +274,7 @@ void BankNFCWindow::payTaxesButtonClicked()
 
 void BankNFCWindow::companyTaxButtonClicked()
 {
-    checkIsUidSame();
+    if (checkIsUidSame()) return;
 
     int taxAmount = ui->companyTaxLineEdit->text().toInt();
     if (taxAmount < 1)
@@ -303,7 +290,6 @@ void BankNFCWindow::companyTaxButtonClicked()
     jsonData["is_card"] = ui->cardRadio->isChecked();
 
     this->setInputsEnabled(false);
-
     rs->httpPost("bankers/pay_company_taxes", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -355,8 +341,6 @@ void BankNFCWindow::companyTaxButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->close();
-            this->deleteLater();
         }
 
         refreshWindow();
@@ -367,14 +351,13 @@ void BankNFCWindow::companyTaxButtonClicked()
 
 void BankNFCWindow::ministerSalaryButtonClicked()
 {
-    checkIsUidSame();
+    if (checkIsUidSame()) return;
 
     QJsonObject jsonData;
     jsonData["uid"] = m_nfcUID;
     jsonData["is_card"] = ui->cardRadio->isChecked();
 
     this->setInputsEnabled(false);
-
     rs->httpPost("bankers/pay_minister_salary", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -391,7 +374,7 @@ void BankNFCWindow::ministerSalaryButtonClicked()
         else if (error == QNetworkReply::ProtocolInvalidOperationError)
         {
             QMessageBox::critical(this,
-            "Ошибка 400 (ProtocolInvalidOperationError)",
+            "Предупреждение!",
             "Зарплата уже была выплачена этому министру.");
         }
         else if (error == QNetworkReply::ContentNotFoundError)
@@ -405,8 +388,6 @@ void BankNFCWindow::ministerSalaryButtonClicked()
             QString errorString = reply->errorString();
             QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
-            this->close();
-            this->deleteLater();
         }
 
         refreshWindow();
@@ -417,7 +398,7 @@ void BankNFCWindow::ministerSalaryButtonClicked()
 
 void BankNFCWindow::refreshWindow()
 {
-    checkIsUidSame();
+    if (checkIsUidSame()) return;
 
     QJsonObject jsonObject;
     jsonObject["uid"] = m_nfcUID;
@@ -482,6 +463,15 @@ void BankNFCWindow::refreshWindow()
                 {
                     ui->companyTaxLineEdit->setDisabled(true);
                     ui->companyTaxButton->setDisabled(true);
+                    ui->ministerSalaryButton->setDisabled(true);
+                }
+
+                if (taxPaid)
+                {
+                    ui->payTaxesButton->setDisabled(true);
+                }
+                if (isMinisterPaid)
+                {
                     ui->ministerSalaryButton->setDisabled(true);
                 }
             }

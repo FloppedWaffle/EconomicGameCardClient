@@ -21,6 +21,7 @@ CompanyWindow::CompanyWindow(QWidget *parent) :
     connect(ui->founderWithdrawButton, &QPushButton::clicked, this, &CompanyWindow::payFounder);
 
     connect(ui->serviceLineEdit, &QLineEdit::textChanged, this, &CompanyWindow::serviceLineEditChanged);
+    connect(ui->servicesListView, &QListView::clicked, this, &CompanyWindow::servicesListViewClicked);
     connect(ui->payServiceButton, &QPushButton::clicked, this, &CompanyWindow::payService);
 
     connect(ui->exitButton, &QPushButton::clicked, this, &CustomWindow::closeWindowsOpenAuth);
@@ -63,7 +64,6 @@ void CompanyWindow::founderLineEditChanged()
 {
     QListWidget *listWidget = ui->foundersListWidget;
     QLineEdit *lineEdit = ui->founderLineEdit;
-
     listWidget->clear();
 
     if (lineEdit->text() == "" || lineEdit->text().split(" ").size() != 2)
@@ -104,7 +104,6 @@ void CompanyWindow::founderLineEditChanged()
 void CompanyWindow::payFounder()
 {
     QListWidgetItem *selectedItem = ui->foundersListWidget->currentItem();
-
     if (!selectedItem)
     {
         QMessageBox::warning(this,
@@ -114,23 +113,21 @@ void CompanyWindow::payFounder()
         return;
     }
 
-    QString selectedId = ui->foundersListWidget->currentItem()->data(Qt::UserRole).toString();
-
-
     int withdraw = ui->founderWithdrawLineEdit->text().toInt();
     if (withdraw < 1)
     {
-        QMessageBox::warning(this, "Предупреждение!",
+        QMessageBox::warning(this,
+        "Предупреждение!",
         "В этом поле допустимы только натуральные положительные числа!");
         return;
     }
 
+    QString selectedId = ui->foundersListWidget->currentItem()->data(Qt::UserRole).toString();
     QJsonObject jsonData;
     jsonData["player_id"] = selectedId;
     jsonData["withdraw"] = withdraw;
 
     this->setInputsEnabled(false);
-
     rs->httpPost("companies/pay_founder", jsonData, [this, withdraw](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -155,8 +152,7 @@ void CompanyWindow::payFounder()
         else
         {
             QString errorString = reply->errorString();
-            QMessageBox::critical(this,
-            errorString,
+            QMessageBox::critical(this, errorString,
             "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
         }
     });
@@ -167,7 +163,7 @@ void CompanyWindow::payFounder()
 void CompanyWindow::serviceLineEditChanged()
 {
     QString lineEditText = ui->serviceLineEdit->text();
-    QListView *listView = ui->serviceListView;
+    QListView *listView = ui->servicesListView;
 
     for (int row = 0; row < m_model->rowCount(); row++)
     {
@@ -183,6 +179,14 @@ void CompanyWindow::serviceLineEditChanged()
             listView->setRowHidden(row, true);
         }
     }
+}
+
+
+
+void CompanyWindow::servicesListViewClicked()
+{
+    QStandardItem *item = m_model->itemFromIndex(ui->servicesListView->currentIndex());
+    item->setCheckState(item->checkState() == Qt::Checked ? Qt::Unchecked : Qt::Checked);
 }
 
 
@@ -314,7 +318,7 @@ void CompanyWindow::refreshWindow()
                 m_model->appendRow(item);
             }
 
-            QListView *listView = ui->serviceListView;
+            QListView *listView = ui->servicesListView;
 
             listView->setModel(m_model);
             listView->setSelectionMode(QAbstractItemView::NoSelection);
@@ -322,9 +326,9 @@ void CompanyWindow::refreshWindow()
         else if (error == QNetworkReply::ContentNotFoundError)
         {
             QMessageBox::critical(this,
-            "Ошибка",
-            "Инфомарция о такой фирме не была найдена! "
-            "Возможно, ваш токен устарел. Попробуйте войти ещё раз.");
+            "Ошибка 404 (ContentNotFoundError)",
+            "Инфомарция о владельцах фирмы не была найдена! "
+            "Зарегистрируйте хотя бы одного владельца, чтобы начать пользоваться фирмой.");
             this->closeWindowsOpenAuth();
         }
         else
@@ -333,7 +337,6 @@ void CompanyWindow::refreshWindow()
             QMessageBox::critical(this,
             errorString,
             "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
-            this->closeWindowsOpenAuth();
         }
     });
 }
@@ -344,11 +347,7 @@ void CompanyWindow::keyPressEvent(QKeyEvent *event)
 {
     int eventKey = event->key();
 
-    if (eventKey == 16777216)
-    {
-        this->closeWindowsOpenAuth();
-    }
-    else if (event->key() == 16777220) // Enter - 16777220
+    if (eventKey == 16777220) // Enter - 16777220
     {
         if (ui->founderLineEdit->hasFocus() ||
             ui->founderWithdrawLineEdit->hasFocus())

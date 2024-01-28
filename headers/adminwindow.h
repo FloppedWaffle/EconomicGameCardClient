@@ -5,6 +5,7 @@
 
 #include <QRandomGenerator>
 #include <QCryptographicHash>
+#include <QStandardItemModel>
 
 namespace Ui {
 class AdminWindow;
@@ -36,13 +37,18 @@ public:
     void companyLineEditChanged();
     void companiesListWidgetClicked();
 
+    void serviceSearchLineEditChanged();
+    void servicesListViewClicked();
+
     void addServiceButtonClicked();
+    void removeServiceButtonClicked();
 
 
 
 
 private:
     Ui::AdminWindow *ui;
+    QStandardItemModel *m_model;
 };
 
 #endif // ADMINWINDOW_H

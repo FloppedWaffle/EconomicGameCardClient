@@ -84,6 +84,12 @@ void BankerWindow::nfcReaderButtonClicked()
             "Ошибка 404 (ContentNotFoundError)",
             "Инфомарция о таком человеке не была найдена! ");
         }
+        else
+        {
+            QString errorString = reply->errorString();
+            QMessageBox::critical(this, errorString,
+            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+        }
     });
 }
 

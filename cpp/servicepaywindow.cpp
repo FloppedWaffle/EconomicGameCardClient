@@ -11,10 +11,10 @@ ServicePayWindow::ServicePayWindow(QWidget *parent, QStandardItemModel *model) :
     ui->setupUi(this);
     this->setWindowTitle("Оплата товаров и услуг");
 
-    QListView *listView = ui->serviceListView;
+    QListView *listView = ui->servicesListView;
 
 
-    connect(listView, &QListView::clicked, this, &ServicePayWindow::serviceListViewClicked);
+    connect(listView, &QListView::clicked, this, &ServicePayWindow::servicesListViewClicked);
 
     connect(ui->servicePlusButton, &QPushButton::clicked, this, &ServicePayWindow::servicePlusButtonClicked);
     connect(ui->serviceMinusButton, &QPushButton::clicked, this, &ServicePayWindow::serviceMinusButtonClicked);
@@ -23,8 +23,12 @@ ServicePayWindow::ServicePayWindow(QWidget *parent, QStandardItemModel *model) :
 
     connect(ui->exitButton, &QPushButton::clicked, this, &ServicePayWindow::exitServicePayButtonClicked);
 
-
     listView->setModel(m_model);
+
+    QTimer::singleShot(0, [this]()
+    {
+        this->setAllCost(m_model);
+    });
 }
 
 ServicePayWindow::~ServicePayWindow()
@@ -35,17 +39,12 @@ ServicePayWindow::~ServicePayWindow()
 
 
 
-void ServicePayWindow::serviceListViewClicked()
+void ServicePayWindow::setAllCost(const QStandardItemModel *model)
 {
-    QStandardItem *item = m_model->itemFromIndex(ui->serviceListView->currentIndex());
-    QString quantity = item->data(Qt::UserRole + 1).toString();
-
-    ui->serviceLineEdit->setText(quantity + " шт");
-
     int allCost = 0;
-    for (int row = 0; row < m_model->rowCount(); row++)
+    for (int row = 0; row < model->rowCount(); row++)
     {
-        QStandardItem *item = m_model->item(row);
+        QStandardItem *item = model->item(row);
         int serviceQuantity = item->data(Qt::UserRole + 1).toInt();
         int serviceCost = item->data(Qt::UserRole + 2).toInt();
         allCost += serviceCost * serviceQuantity;
@@ -56,26 +55,40 @@ void ServicePayWindow::serviceListViewClicked()
 
 
 
+void ServicePayWindow::servicesListViewClicked()
+{
+    QStandardItem *item = m_model->itemFromIndex(ui->servicesListView->currentIndex());
+    QString quantity = item->data(Qt::UserRole + 1).toString();
+
+    ui->serviceLineEdit->setText(quantity + " шт");
+}
+
+
+
 void ServicePayWindow::servicePlusButtonClicked()
 {
-    QStandardItem *item = m_model->itemFromIndex(ui->serviceListView->currentIndex());
+    QStandardItem *item = m_model->itemFromIndex(ui->servicesListView->currentIndex());
     int serviceQuantity = item->data(Qt::UserRole + 1).toInt();
 
     item->setData(serviceQuantity + 1, Qt::UserRole + 1);
-    serviceListViewClicked();
+
+    this->servicesListViewClicked();
+    this->setAllCost(m_model);
 }
 
 
 
 void ServicePayWindow::serviceMinusButtonClicked()
 {
-    QStandardItem *item = m_model->itemFromIndex(ui->serviceListView->currentIndex());
+    QStandardItem *item = m_model->itemFromIndex(ui->servicesListView->currentIndex());
     int serviceQuantity = item->data(Qt::UserRole + 1).toInt();
 
     if (serviceQuantity <= 1) return;
 
     item->setData(serviceQuantity - 1, Qt::UserRole + 1);
-    serviceListViewClicked();
+
+    this->servicesListViewClicked();
+    this->setAllCost(m_model);
 }
 
 
@@ -113,7 +126,6 @@ void ServicePayWindow::servicePayButtonClicked()
 
 
     this->setInputsEnabled(false);
-
     rs->httpPost("companies/pay_services", jsonData, [this](QNetworkReply *reply)
     {
         this->setInputsEnabled(true);
@@ -176,14 +188,8 @@ void ServicePayWindow::exitServicePayButtonClicked()
 void ServicePayWindow::keyPressEvent(QKeyEvent *event)
 {
     int eventKey = event->key();
-    qDebug() << eventKey;
 
-    if (eventKey == 16777216) // ESC
-    {
-        this->close();
-        this->deleteLater();
-    }
-    else if (ui->serviceListView->hasFocus())
+    if (ui->servicesListView->hasFocus())
     {
         if (eventKey == 61)    // CTRL + (+)
         {
@@ -195,30 +201,27 @@ void ServicePayWindow::keyPressEvent(QKeyEvent *event)
         }
         else if (eventKey == 16777234) // LEFT ARROW
         {
-            QModelIndex curIndex = ui->serviceListView->currentIndex();
+            QModelIndex curIndex = ui->servicesListView->currentIndex();
             QModelIndex prevIndex = curIndex.sibling(curIndex.row() - 1, curIndex.column());
 
             if (prevIndex.isValid())
             {
-                ui->serviceListView->setCurrentIndex(prevIndex);
+                ui->servicesListView->setCurrentIndex(prevIndex);
             }
 
-            serviceListViewClicked();
+            servicesListViewClicked();
         }
         else if (eventKey == 16777236) // RIGHT ARROW
         {
-            QModelIndex curIndex = ui->serviceListView->currentIndex();
+            QModelIndex curIndex = ui->servicesListView->currentIndex();
             QModelIndex nextIndex = curIndex.sibling(curIndex.row() + 1, curIndex.column());
 
             if (nextIndex.isValid())
             {
-                ui->serviceListView->setCurrentIndex(nextIndex);
+                ui->servicesListView->setCurrentIndex(nextIndex);
             }
 
-            serviceListViewClicked();
+            servicesListViewClicked();
         }
-
-//        this->setFocus();
-//        ui->serviceListView->setFocus();
     }
 }

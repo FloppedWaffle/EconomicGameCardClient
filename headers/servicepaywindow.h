@@ -26,7 +26,9 @@ public:
     explicit ServicePayWindow(QWidget *parent = nullptr, QStandardItemModel *model = nullptr);
     ~ServicePayWindow() override;
 
-    void serviceListViewClicked();
+    void setAllCost(const QStandardItemModel *model);
+
+    void servicesListViewClicked();
     void servicePlusButtonClicked();
     void serviceMinusButtonClicked();
 

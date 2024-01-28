@@ -121,6 +121,14 @@ bool CustomWindow::commonNetworkError(const QNetworkReply::NetworkError &error)
         this->closeWindowsOpenAuth();
         return true;
     }
+    else if (error == QNetworkReply::UnknownContentError)
+    {
+        QMessageBox::critical(this,
+        "Ошибка (UnknownContentError)",
+        "Превышено количество запросов! "
+        "Подождите несколько секунд, прежде чем продолжить работу");
+        return true;
+    }
 
     return false;
 }
