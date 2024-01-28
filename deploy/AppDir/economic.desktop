@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Economic Game Card Client
+Comment=Program for managing game currency
+Exec=EconomicGameCardClient
+Icon=economicgame256
+Terminal=false
+Type=Application
+Categories=Game;
