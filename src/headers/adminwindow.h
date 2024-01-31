@@ -24,6 +24,7 @@ public:
 
     void registerPersonButtonClicked();
     void registerCompanyButtonClicked();
+    void registerTeacherButtonClicked();
 
 
     void personLineEditChanged();

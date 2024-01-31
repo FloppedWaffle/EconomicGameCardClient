@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1198</width>
-    <height>556</height>
+    <width>1143</width>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <string notr="true">#exitButton
 {
     background-color: #F99127;
-    color: black;
+    color: white;
 	border: none;
 	padding: 15px;
 }
@@ -219,7 +219,24 @@ QPushButton::disabled
         <item row="0" column="0">
          <widget class="QFrame" name="registerFrame">
           <property name="styleSheet">
-           <string notr="true">QLineEdit
+           <string notr="true">#registerFrame
+{
+	border: none;
+}
+
+QFrame
+{
+	border: 5px solid #F99127;
+}
+
+QLabel
+{
+	border: none;
+}
+
+
+
+QLineEdit
 {
 	color: #212529;
 	padding: 10px;
@@ -266,24 +283,19 @@ QPushButton::disabled
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QFrame" name="personRegisterFrame">
              <property name="styleSheet">
-              <string notr="true">QFrame
-{
-	border: 5px solid #BFFF00;
-}
-
-
-
-QLabel
-{
-	border: none;
-}
-
-
-
-QCheckBox::indicator:checked
+              <string notr="true">QCheckBox::indicator:checked
 {
 	background-color: #FFA706;
 }</string>
@@ -328,7 +340,7 @@ QCheckBox::indicator:checked
                 <property name="font">
                  <font>
                   <family>Fira Sans Condensed</family>
-                  <pointsize>32</pointsize>
+                  <pointsize>24</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -340,7 +352,7 @@ QCheckBox::indicator:checked
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="firstnameLineEdit">
+               <widget class="QLineEdit" name="personFirstnameLineEdit">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -453,14 +465,7 @@ QCheckBox::indicator:checked
            <item>
             <widget class="QFrame" name="companyRegisterFrame">
              <property name="styleSheet">
-              <string notr="true">QFrame
-{
-	border: 5px solid #BFFF00;
-}
-
-
-
-QLabel
+              <string notr="true">QLabel
 {
 	border: none;
 }</string>
@@ -502,7 +507,7 @@ QLabel
                 <property name="font">
                  <font>
                   <family>Fira Sans Condensed</family>
-                  <pointsize>32</pointsize>
+                  <pointsize>24</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -550,6 +555,160 @@ QLabel
               </item>
               <item>
                <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="teacherRegisterFrame">
+             <property name="styleSheet">
+              <string notr="true">QCheckBox::indicator:checked
+{
+	background-color: #FFA706;
+}</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item>
+               <spacer name="verticalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="registerTeacherLabel">
+                <property name="font">
+                 <font>
+                  <family>Fira Sans Condensed</family>
+                  <pointsize>24</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Регистрация учителя</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="teacherFirstnameLineEdit">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Fira Sans Condensed</family>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>Имя:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="middlenameLineEdit">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Fira Sans Condensed</family>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>Отчество:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="subjectNameLineEdit">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Fira Sans Condensed</family>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>Название госпредприятия:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="registerTeacherButton">
+                <property name="font">
+                 <font>
+                  <family>Fira Sans Condensed</family>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Зарегистрировать учителя</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_8">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
                 </property>

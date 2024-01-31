@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QFontDatabase>
 
 #include "authwindow.h"
 #include "teacherwindow.h"
@@ -12,7 +13,22 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+
     a.setWindowIcon(QIcon(":/img/img/economicgame.png"));
+
+    QFile fontFile(":/fonts/fonts/FiraSansCondensed-Medium.ttf");
+    fontFile.open(QIODevice::ReadOnly);
+    QByteArray fontData = fontFile.readAll();
+    fontFile.close();
+
+    int fontId = QFontDatabase::addApplicationFontFromData(fontData);
+    QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+
+    if (!fontFamilies.isEmpty()) {
+        QFont font(fontFamilies.at(0));
+        a.setFont(font);
+    }
+
 
     QSettings settings("EconomicGame", "AuthSettings");
     QString role = settings.value("role").toString();

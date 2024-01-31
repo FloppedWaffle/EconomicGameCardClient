@@ -17,6 +17,7 @@ AdminWindow::AdminWindow(QWidget *parent) :
 
     connect(ui->registerPersonButton, &QPushButton::clicked, this, &AdminWindow::registerPersonButtonClicked);
     connect(ui->registerCompanyButton, &QPushButton::clicked, this, &AdminWindow::registerCompanyButtonClicked);
+    connect(ui->registerTeacherButton, &QPushButton::clicked, this, &AdminWindow::registerTeacherButtonClicked);
 
 
     connect(ui->personLineEdit, &QLineEdit::textChanged, this, &AdminWindow::personLineEditChanged);
@@ -74,7 +75,7 @@ void AdminWindow::navigateBarButtonClicked()
 
 void AdminWindow::registerPersonButtonClicked()
 {
-    QString firstname = ui->firstnameLineEdit->text();
+    QString firstname = ui->personFirstnameLineEdit->text();
     QString lastname = ui->lastnameLineEdit->text();
     QString grade = ui->gradeLineEdit->text();
     bool isMinister = ui->isMinisterCheckBox->checkState();
@@ -108,7 +109,7 @@ void AdminWindow::registerPersonButtonClicked()
             QMessageBox::information(this,
             "Успешно!",
             "Игрок был успешно зарегистрирован!");
-            ui->firstnameLineEdit->clear();
+            ui->personFirstnameLineEdit->clear();
             ui->lastnameLineEdit->clear();
             ui->gradeLineEdit->clear();
         }
@@ -168,6 +169,65 @@ void AdminWindow::registerCompanyButtonClicked()
             QMessageBox::critical(this,
             "Ошибка 400 (ProtocolInvalidOperationError)",
             "Фирма не была зарегистрирована, т.к. фирма с таким именем или паролем уже присутствует в базе данных.");
+        }
+    });
+}
+
+
+
+void AdminWindow::registerTeacherButtonClicked()
+{
+    QString firstname = ui->teacherFirstnameLineEdit->text();
+    QString middlename = ui->middlenameLineEdit->text();
+    QString subjectName = ui->subjectNameLineEdit->text();
+
+    if (!firstname.length() || !middlename.length() || !subjectName.length() || !nfcMgr->isCardAttached())
+    {
+        QMessageBox::warning(this,
+        "Предупреждение!",
+        "Некоторые поля выше не были заполнены или карта не была приложена к считывателю!");
+        return;
+    }
+
+    QJsonObject jsonObject;
+    jsonObject["firstname"] = firstname.trimmed();
+    jsonObject["middlename"] = middlename.trimmed();
+    jsonObject["subject_name"] = subjectName.trimmed();
+//    jsonObject["uid"] = nfcMgr->getCardUID();
+    jsonObject["uid"] = "test";
+
+    const QString possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    QString randomPassword;
+    for (int i = 0; i < 10; ++i) {
+        int index = QRandomGenerator::global()->bounded(possibleCharacters.length());
+        randomPassword.append(possibleCharacters.at(index));
+    }
+    QString hashedCode = QCryptographicHash::hash(randomPassword.toUtf8(), QCryptographicHash::Sha256).toHex();
+    jsonObject["password"] = hashedCode;
+
+
+    this->setInputsEnabled(false);
+    rs->httpPost("admin/register_teacher", jsonObject, [this, randomPassword](QNetworkReply *reply)
+    {
+        this->setInputsEnabled(true);
+        if (!this->isVisible()) return;
+        QNetworkReply::NetworkError error = reply->error();
+        if (this->commonNetworkError(error)) return;
+
+        if (error == QNetworkReply::NoError)
+        {
+            QMessageBox::information(this,
+            "Успешно!",
+            QString("Учитель был успешно зарегистрирован! Код учителя: %1").arg(randomPassword));
+            ui->teacherFirstnameLineEdit->clear();
+            ui->middlenameLineEdit->clear();
+            ui->subjectNameLineEdit->clear();
+        }
+        else if (error == QNetworkReply::ProtocolInvalidOperationError)
+        {
+            QMessageBox::critical(this,
+            "Ошибка 400 (ProtocolInvalidOperationError)",
+            "Учитель не был зарегистрирован, т.к. человек с такими именем и фамилией или его карта уже присутствуют в базе данных.");
         }
     });
 }
