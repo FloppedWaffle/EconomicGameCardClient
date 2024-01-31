@@ -2,3 +2,4 @@
 *.stash*
 build
 deploy/old_versions/
+*.AppImage
