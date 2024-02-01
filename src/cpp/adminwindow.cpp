@@ -193,8 +193,7 @@ void AdminWindow::registerTeacherButtonClicked()
     jsonObject["firstname"] = firstname.trimmed();
     jsonObject["middlename"] = middlename.trimmed();
     jsonObject["subject_name"] = subjectName.trimmed();
-//    jsonObject["uid"] = nfcMgr->getCardUID();
-    jsonObject["uid"] = "test";
+    jsonObject["uid"] = nfcMgr->getCardUID();
 
     const QString possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     QString randomPassword;

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# need linuxdeployqt and appimagetool (in appimage format)
+
 chmod +x linuxdeployqt-continuous-x86_64.AppImage
 ./linuxdeployqt-continuous-x86_64.AppImage AppDir/economic.desktop -bundle-non-qt-libs -always-overwrite
 

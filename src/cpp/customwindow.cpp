@@ -10,7 +10,7 @@ CustomWindow::CustomWindow(QWidget *parent) :
     p_settings("EconomicGame", "AuthSettings")
 {
 
-    bool prod = false;
+    bool prod = true;
     rs = new RequestSender(QUrl(prod ? "http://31.129.109.65:5000" : "http://192.168.1.187:5000"), this);
 }
 
