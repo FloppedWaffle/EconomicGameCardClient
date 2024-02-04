@@ -155,9 +155,9 @@ void TeacherWindow::payTalicButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
     });
 }
@@ -196,9 +196,9 @@ void TeacherWindow::payTaxesButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
     });
 }
@@ -244,9 +244,10 @@ void TeacherWindow::refreshWindow()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
+            qDebug() << error;
         }
     });
 }

@@ -115,9 +115,9 @@ void BankNFCWindow::transferMoney()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         refreshWindow();
@@ -220,9 +220,9 @@ void BankNFCWindow::personTransferButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         refreshWindow();
@@ -261,9 +261,9 @@ void BankNFCWindow::payTaxesButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         refreshWindow();
@@ -338,9 +338,9 @@ void BankNFCWindow::companyTaxButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         refreshWindow();
@@ -385,9 +385,9 @@ void BankNFCWindow::ministerSalaryButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         refreshWindow();

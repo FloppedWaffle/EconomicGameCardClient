@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>337</width>
+    <width>385</width>
     <height>498</height>
    </rect>
   </property>
@@ -229,7 +229,7 @@ QListView QScrollBar:down-arrow:vertical
           <bool>true</bool>
          </property>
          <property name="placeholderText">
-          <string>Кол-во:</string>
+          <string>Кол-во товара/услуги</string>
          </property>
         </widget>
        </item>
@@ -457,7 +457,7 @@ QRadioButton::indicator:checked
           <bool>true</bool>
          </property>
          <property name="placeholderText">
-          <string>Итог:</string>
+          <string>Итог</string>
          </property>
         </widget>
        </item>

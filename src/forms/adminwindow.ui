@@ -197,7 +197,7 @@ QPushButton::disabled
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="registerPage">
        <layout class="QGridLayout" name="gridLayout">
@@ -369,7 +369,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Имя:</string>
+                 <string>Имя</string>
                 </property>
                </widget>
               </item>
@@ -391,7 +391,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Фамилия:</string>
+                 <string>Фамилия</string>
                 </property>
                </widget>
               </item>
@@ -413,7 +413,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Класс:</string>
+                 <string>Класс</string>
                 </property>
                </widget>
               </item>
@@ -536,7 +536,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Название фирмы:</string>
+                 <string>Название фирмы</string>
                 </property>
                </widget>
               </item>
@@ -646,7 +646,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Имя:</string>
+                 <string>Имя</string>
                 </property>
                </widget>
               </item>
@@ -668,7 +668,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Отчество:</string>
+                 <string>Отчество</string>
                 </property>
                </widget>
               </item>
@@ -690,7 +690,7 @@ QPushButton::disabled
                  <string/>
                 </property>
                 <property name="placeholderText">
-                 <string>Название госпредприятия:</string>
+                 <string>Название госпредприятия</string>
                 </property>
                </widget>
               </item>
@@ -932,7 +932,7 @@ QListView::indicator:checked
                  <number>64</number>
                 </property>
                 <property name="placeholderText">
-                 <string>Имя и фамилия игрока (с больших букв):</string>
+                 <string>Имя и фамилия игрока (с больших букв)</string>
                 </property>
                </widget>
               </item>
@@ -1205,7 +1205,7 @@ QCheckBox::indicator:checked
                  <number>64</number>
                 </property>
                 <property name="placeholderText">
-                 <string>Название фирмы:</string>
+                 <string>Название фирмы</string>
                 </property>
                </widget>
               </item>
@@ -1294,7 +1294,7 @@ QCheckBox::indicator:checked
                  <number>64</number>
                 </property>
                 <property name="placeholderText">
-                 <string>Название товара/услуги:</string>
+                 <string>Название товара/услуги</string>
                 </property>
                </widget>
               </item>
@@ -1328,7 +1328,7 @@ QCheckBox::indicator:checked
                  <number>64</number>
                 </property>
                 <property name="placeholderText">
-                 <string>Цена услуги/товара:</string>
+                 <string>Цена услуги/товара</string>
                 </property>
                </widget>
               </item>
@@ -1362,7 +1362,7 @@ QCheckBox::indicator:checked
                  <number>64</number>
                 </property>
                 <property name="placeholderText">
-                 <string>Количество товаров/услуг:</string>
+                 <string>Количество товаров/услуг</string>
                 </property>
                </widget>
               </item>
@@ -1459,7 +1459,7 @@ QCheckBox::indicator:checked
                  <number>64</number>
                 </property>
                 <property name="placeholderText">
-                 <string>Название товара/услуги:</string>
+                 <string>Название товара/услуги</string>
                 </property>
                </widget>
               </item>

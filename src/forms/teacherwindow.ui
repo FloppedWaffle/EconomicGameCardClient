@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
+    <width>511</width>
     <height>796</height>
    </rect>
   </property>
@@ -163,7 +163,7 @@ QPushButton::disabled
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="teacherPage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -520,7 +520,7 @@ QLineEdit:disabled
               <number>64</number>
              </property>
              <property name="placeholderText">
-              <string>Имя и фамилия игрока (с больших букв):</string>
+              <string>Имя и фамилия игрока (с больших букв)</string>
              </property>
             </widget>
            </item>

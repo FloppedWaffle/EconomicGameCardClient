@@ -7,6 +7,7 @@
 #include "servicepaywindow.h"
 #include "bankerwindow.h"
 #include "atmwindow.h"
+#include "adminwindow.h"
 
 
 int main(int argc, char *argv[])
@@ -49,6 +50,10 @@ int main(int argc, char *argv[])
     else if (role == "atm")
     {
         mainWindow = new ATMWindow(nullptr);
+    }
+    else if (role == "admin")
+    {
+        mainWindow = new AdminWindow(nullptr);
     }
     else
     {

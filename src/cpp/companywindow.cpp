@@ -151,9 +151,9 @@ void CompanyWindow::payFounder()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
     });
 }
@@ -333,10 +333,9 @@ void CompanyWindow::refreshWindow()
         }
         else
         {
-            QString errorString = reply->errorString();
             QMessageBox::critical(this,
-            errorString,
-            "Возникла неизвестная ошибка! Читайте подробнее в названии окна ошибки.");
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
     });
 }

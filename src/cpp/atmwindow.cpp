@@ -299,9 +299,9 @@ void ATMWindow::personTransferButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         getPerson();
@@ -339,9 +339,9 @@ void ATMWindow::payTaxesButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         getPerson();
@@ -415,9 +415,9 @@ void ATMWindow::companyTaxButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         getPerson();
@@ -461,9 +461,9 @@ void ATMWindow::ministerSalaryButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
         getPerson();

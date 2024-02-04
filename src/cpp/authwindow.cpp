@@ -145,14 +145,6 @@ void AuthWindow::authRequestButtonClicked()
     QJsonObject jsonObject;
     jsonObject["auth_password"] = hashedCode;
 
-    if (hashedCode == "a5756b24b3f207f8e30f3c51c5cf052dbb07073ca703c1862094b45556d33055")
-    {
-        this->close();
-        QMainWindow *mainWindow = new AdminWindow(nullptr);
-        mainWindow->show();
-        this->deleteLater();
-        return;
-    }
 
     this->setInputsEnabled(false);
 
@@ -198,6 +190,12 @@ void AuthWindow::authRequestButtonClicked()
                 mainWindow = new ATMWindow(nullptr);
                 this->deleteLater();
             }
+            else if (role == "admin")
+            {
+                this->close();
+                mainWindow = new AdminWindow(nullptr);
+                this->deleteLater();
+            }
             else
             {
                 this->close();
@@ -217,9 +215,9 @@ void AuthWindow::authRequestButtonClicked()
         }
         else
         {
-            QString errorString = reply->errorString();
-            QMessageBox::critical(this, errorString,
-            "Возникла неизвестная ошибка! Подробности в названии окна ошибки.");
+            QMessageBox::critical(this,
+            "Ошибка!",
+            "Возникла неизвестная ошибка!");
         }
 
 
