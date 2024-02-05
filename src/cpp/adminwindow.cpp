@@ -265,8 +265,14 @@ void AdminWindow::personLineEditChanged()
                 QString lastname = player[1].toString();
                 QString grade = player[2].toString();
                 int playerId = player[3].toInt();
+                bool isMinister = player[4].toInt();
+                qDebug() << player[4];
 
-                QString playerInfo = QString("%1 %2 | Класс: %3").arg(firstname).arg(lastname).arg(grade);
+                QString playerInfo = QString("%1 %2 | Класс: %3 | Роль: %4")
+                .arg(firstname)
+                .arg(lastname)
+                .arg(grade)
+                .arg(isMinister ? "госслужащий" : "обычный игрок");
 
                 QListWidgetItem *item = new QListWidgetItem(playerInfo);
                 item->setData(Qt::UserRole, playerId);
