@@ -7,7 +7,6 @@ TeacherWindow::TeacherWindow(QWidget *parent) :
     CustomWindow(parent),
     ui(new Ui::TeacherWindow)
 {
-    //TODO: надо доделать ошибки у запросов (посмотреть, какие ошибки могут прилетать с бэка и дописать тут окна ошибок.
 
     ui->setupUi(this);
 
@@ -222,9 +221,16 @@ void TeacherWindow::refreshWindow()
             QString teacherBalance = jsonData["balance"].toString();
             QString teacherSubjectName = jsonData["subject_name"].toString();
 
-            if (QDate::currentDate() > QDate(QDate::currentDate().year(), 2, 12))
+            if (QDate::currentDate() >= QDate(QDate::currentDate().year(), 2, 16))
             {
                 ui->payFiveButton->setDisabled(true);
+            }
+            else
+            {
+                ui->payTenButton->setDisabled(true);
+                ui->payTwentyButton->setDisabled(true);
+                ui->payThirtyButton->setDisabled(true);
+                ui->payTaxesButton->setDisabled(true);
             }
 
             ui->teacherName->setText("Имя и отчество: " + teacherName);
